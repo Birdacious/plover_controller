@@ -378,7 +378,8 @@ class ControllerState:
                     process(start_idx, end_idx-1)
         for stick in self._mappings.sticks.values():
             pending_movements = self._pending_stick_movements.get(stick.name, [])
-            process(0, len(pending_movements))
+            if(len(pending_movements)<20):
+              process(0, len(pending_movements))
             self._pending_stick_movements[stick.name] = []
 
     def maybe_complete_stroke(self):
