@@ -1,206 +1,113 @@
-dirs <- c(r=1,ur=2,u=3,ul=4,l=5,dl=6,d=7,dr=8)
+# V should NOT be double tap, b/c it's never used in non-R/L clusters. (ever, evil sure, but evp, evt, evm, evn
+# Although LHS V never combos w/ a/t, RHS v is full of combos (cavern, govt, covet, cavity, scavenge, aversion...). So it could deserve the double-tap spot for RHS's sake.
+#
+# Since L is taken care of by double taps, the next most-combos guy is M & N. Now THEY can take a nice spot on the stick, l or r.
+# Let's try to make this maximally forgving. So, cross-deadzone motions should have 3 sectors of forgiveness. Only 1 motion to the clockwise/counterclockwise.
+#   That way I can just FLY w/o worrying about finger accuracy.
+#   And for speed, no double-tap into cross-deadzone, only double-tap into motion.
+#   This is enough restrictions that I think I could list out e/ motion now:
+#     u d l r ur dr ul dl
+#     double taps of each
+#     cross-deadzones of each
+#     clockwise/counter-clockwise of each
+#     double tap + clockwise/counter-clockwise of each.
+#     Total: 8 * 2 * 2 * 2 * 2 = 2^7 = 128, minus some uncomfortable exceptions like LHS ur ur u or ur ur r. That'll do!
+#   Aren't I wasting some potential of the # of possibilities the sticks have though?
+#     No, it's fine. You start with this simple base, and then you can always make exceptions later for the longer motions that are easy to do accurately.
+#
+# LK LG are same. But KR/KL and GR/GL are not.
+#   So, G can be in a place difficult to double-tap-ish on RHS. That's RHS dr.
+#   But LJ is still used. So 
+#   Also need NG. MG doesn't exist. Cross-deadzone seems good for this. And it's uncomfy to do this cdz on LHS too so even perfecter spot.
+#   LHS has gl- but no jl-. RHS has -lj but no -lg. This means I can replace double-tap + motion to be s/t else.
 
-# JUSTIFICATIONS
-# MISC.
-# R -> P -> F looks like you're removing a line from the letter each time.
-# R -> B going the opposite way b/c looks like you're adding a line, and B ending on a similar hard consonant sound K makes sense.
-#     B -> V related sounds (V pronounced B in Spanish). Also good to put V in an uncomfortable spot for countermotions, since it doesn't need counter motions. Also B for "Bottom" in the bottom position
-# ^ Also cool to have F & V at the end of these two chains, since they are related sounds.
-# G -> J -> Y related sounds
-# R is tappable on both sides b/c it is 1) very common 2) has no use for countermotions. 2nd most comfortable spot.
-# W -> M b/c upside-down. 
-# ^    M -> N -> ent/int- / -n't related sounds, plus the latter ending at the T sector makes sense.
-# D is tappable b/c it's a pretty common word starter, and SUPER common on RHS for adding -ed to words.
-#   I put it in the spot where it is easy to make motions but unfomfortable to make countermotions. It is good to put R-and-L-already-included things (DR+DL/RD+LD) in these motion spots, b/c they do not need countermotions.
-# RHS LG countermotion lands on K which makes sense b/c LG sounds like -lk
-# J is in a position on left stick where it is easy to make mistaken countermotions, but doesn't matter b/c J=SKWR
-# J is in the same place on right stick, but there it is easier to avoid mistaken countermotions, which is greate, b/c -rj is actually somewhat used
-
-# LEFT STICK
-# S = Extremely common, deserves the most comfortable spot.
-# T Also very common, deserves a comfortable spot, but doesn't have many consonant combos so doesn't need to have comrortable motions more than a couple sectors away.
-# W tappable but in uncomfortable spot to make motoins
-# W being opposite of R is nice; WR combo often used for orthographic disambiguation (e.g. right vs write)
-# Y is in a spot where it is easy to make mistaken countermotions. But it already includes R (Y=KWR), so that solves that!
-# K
-#   KH is in a place where countermotions are very uncomfortable, perfect b/c CH+R CH+L sounds don't exist. More comfortable on right stick tho which is good b/c -rch & -lch do exist.
-# DL ends in the 'dl' direction!
-
-# RIGHT STICK
-# F - F fills in for S often, so same reasoning as for S on left stick.
-
-# TODO?
-# Plenty of space to add common prefix/suffixes or other briefs
-# I am not too attached to the position of the lone L
-    
-MAPS_l <- list(
-  S='ul',
-    SH=c('ul','u'), SW=c('ul','u','ur'), SM=c('ul','u','ur','r'), SN=c('ul','u','ur','r','dr'),
-    ST=c('ul','l'), SP=c('ul','l','dl'), SK=c('ul','l','dl','d'), SN=c('ul','l','dl','d','dr'),
-  T='l', #↓HR
-     L=c('l','ul'), TH=c('l','ul','u'), TW=c('l','ul','u','ur'), TW=c('l','ul','u','ur','r'),
-    TR=c('l','dl'), TR=c('l','dl','d'),
-  R='dl',           # ^ misstroke, but easy to avoid so could replace. # v misttoke
-    P=c('dl','l'), F=c('dl','l','ul'), F=c('dl','l','ul','u'), TW=c('dl','l','ul','u','ur'),
-    R=c('dl','d'), B=c('dl','d','dr'), V=c('dl','d','dr','r'),
-  K='d', #↑SR
-    KR=c('d','dl'), KL=c('d','dl','l'),
-    KH=c('d','dr'),  X=c('d','dr','r'), X=c('d','dr','r','ur'),
-  D='dr', #TK       #↑KP
-    DR=c('dr','d'), DL=c('dr','d','dl'), DL=c('dr','d','dl','l'),
-     G=c('dr','r'),  J=c('dr','r','ur'),  Y=c('dr','r','ur','u'),
-  #M='r', #↑TPKW    #↑SKWR               #↑KWR
-    D=c('r','dr'), DR=c('r','dr','d'), DL=c('r','dr','d','dl'), DL=c('r','dr','d','dl','l'), # misstrokes
-    #=c('r','ur'),
-  W='ur',
-     #=c('ur','r'),
-     M=c('ur','u'), N=c('ur','u','ul'), SPW=c('ur','u','ul','l'),
-  H='u'                                 #↑ent-/int-
+mapsl <- list( # Trigger: S-    Shoulder: R-
+  `#`='ur', # NO other motions from ur, too uncomfy  
+    `#`=c('ur','u'), # misstroke
+  G='dl', GL=c('dl','dl'),
+    J=c('dl','l'), Y=c('dl','l','ul'),
+      J=c('dl','l','dl'), # misstroke
+    G=c('dl','d'), # misstroke
+  M='r', W=c('r','r'), WH=c('r','r','ur'),
+      D=c('r','dr'), # misstroke
+      N=c('r','ur'),
+    SPW=c('r','l'), #ent-/int-
+      SPW=c('r','ul'), SPW=c('r','dl'), # misstrokes
+    KW=c('r','r','ur','u'),
+  P='ul', PL=c('ul','ul'),
+    P=c('ul','u'), # misstroke
+  K='u', KL=c('u','u'),
+    X=c('u','ul'),
+    CH=c('u','ur'), KM=c('u','ur','r'),
+  T='l', F=c('l','l'),
+    T=c('l','dl'), # misstroke
+    TW=c('l','r'), FL=c('l','l','r'), # No need to double-tap for TW, since TM- doesn't exist. What to do about -lmt on RHS? RHS has F on shoulder button so this spot frees up.
+      TW=c('l','ur'), TW=c('l','dr'), # misstrokes
+      FL=c('l','l','ur'), FL=c('l','l','dr'), # misstrokes
+    TH=c('l','ul'), V=c('l','l','ul'),
+  D='dr', DL=c('dr','dr'),
+    B=c('dr','r'), BL=c('dr','dr','r'),
+  H='d', L=c('d','d'),
+    DL=c('d','dr'), BL=c('d','dr','r'), # Easier to reach DL & BL this way
+    Z=c('d','dl')
 )
-MAPS_r <- list(
-  F='ur', #↓SH                                                  
-    RB=c('ur','u'),  S=c('ur','u','ul'),  Z=c('ur','u','ul','l'),
-    FT=c('ur','r'), FP=c('ur','r','dr'), FK=c('ur','r','dr','d'),
-  T='r',            #↓TH
-     L=c('r','ur'), `*T`=c('r','ur','u'), TS=c('r','ur','u','ul'), TZ=c('r','ur','u','ul','l'),
-    RT=c('r','dr'),   LT=c('r','dr','d'),
-  R='dr',
-    P=c('dr','r'), F=c('dr','r','ur'),
-    B=c('dr','d'), V=c('dr','d','dl'), V=c('dr','d','dl','l'),
-  K='d', # BG
-    RK=c('d','dr'), LG=c('d','dr','r'), NG=c('d','dr','r','ur'), #NG=-nk. Using G plus countermotion more comfy tho.
-    FP=c('d','dl'), GS=c('d','dl','l'),  X=c('d','dl','l','ul'),
-  D='dl', #↑CH      #↑-shun             #↑BGS. X/-kshun
-    RD=c('dl','d'), LD=c('dl','d','dr'), LD=c('dl','d','dr','r'),
-     G=c('dl','l'),  J=c('dl','l','ul'),
-  #='l',
-    #D=c('l','dl'), RD=c('l','dl','d'), LD=c('l','dl','d','dr'), LD=c('l','dl','d','dr','r'), # misstrokes
-    #=c('l','ul'),
-  #='ul',
-    #=c('ul','u'),
-    M=c('ul','u'), N=c('ul','u','ur'), `*PBT`=c('ul','u','ur','l'),
-  `#`='u',
-    S=c('u','ul'), Z=c('u','ul','l') # misstrokes
-    #=c('u','ur'),
+
+mapsr <- list( # Trigger: -F    Shoulder: -R
+  `#`='ul', # and NO other motions from ul, too uncomfy
+    `#`=c('ul','u'), # misstoke
+  M='l', #`*NG`=c('u','u'), # M=-PL so LM doesn't actually exist oh RHS either!
+    N=c('l','ul'),
+      NL=c('u','u','ul'), # vuln, anlysis
+    MT=c('l','r'),
+    D=c('l','dl'), # misstroke
+  G='dr', LG=c('dr','dr'), # -gl-
+    J=c('dr','r'),
+      LG=c('dr','dr','r'), # -lj
+    #Y=c('dr','d'),
+    NG=c('dr','ul'),
+      NG=c('dr','u'), NG=c('dr','l'), # misstrokes
+  P='ur', #PL=c('u','u'),
+    `*PL`=c('ur','u'), # -mp # Or, 'ur','l' accurate enough?
+  T='r', LT=c('r','r'),
+    NT=c('r','l'), `*PBT`=c('r','r','l'), # -nt, ^n't / -nth / -ngth
+      NT=c('r','ul'), NT=c('r','dl'), # misstrokes
+      `*PBT`=c('r','r','ul'),`*PBT`=c('r','r','dl'), # misstrokes
+    `*T`=c('r','ur'), V=c('r','r','ur'),
+  D='dl', LD=c('dl','dl'),
+    LD=c('dl','dl','d'), LD=c('d','dl','dl'), # misstrokes
+    B=c('dl','l'), LB=c('dl','dl','l'),
+    ND=c('dl','ur'),
+      ND=c('dl','u'), ND=c('dl','r'), # misstrokes
+  K='u', `*LG`=c('u','u'), # Note: *LG is -lk, LG is -lch/-lj. *PBG is -nk, PBG is -ng. GT is very common -ct.
+    FP=c('u','ur'), KT=c('u','ur','r'), # -ch, -ct
+      LG=c('u','u','ur'), # -lch/lj or -gl-
+      FRPB=c('u','ur','dl'), # -rch/-nch
+        FRPB=c('u','ur','d'), FRPB=c('u','ur','l'), # misstrokes
+    `*NG`=c('u','d'), # -nk
+      `*NG`=c('u','dl'), `*NG`=c('u','dr'), # misstrokes
+    GS=c('u','ul'), X=c('u','ul','l'), # -shun, -kshun
+  S='d', L=c('d','d'),
+    L=c('d','d','dr'), # misstroke
+    Z=c('d','dl'),
+      LS=c('d','d','dl'), LZ=c('d','d','dl','l'),
+    RB=c('d','dr')
 )
+
 #STKPWHR AO*EU FRPBLGTSDZ
 
-iMAPS_l <- lapply(MAPS_l, \(map) dirs[map])
-iMAPS_r <- lapply(MAPS_r, \(map) dirs[map])
+# What if -K  & -rch/-nch, and I want to add D/S/Z to it?
+#   Doesn't matter. Just add the D/S/Z in the next stroke. No workd ending w/ -K or -rch/-nch needs an S or D in it as part of the base word's spelling that can't just be added as a postfix in a separate stroke.
 
-generate_countermotions <- \(imap, nm, stick=c('l','r')) {
-  if(length(imap)==1) { # Tap
-    if(stick=='l') return( list(c(imap,imap)) |> setNames(paste0(nm,'*')) ) 
-    if(stick=='r') return( list(c(imap,imap)) |> setNames(paste0('*',nm)) ) 
-  }
+# TODO: because -R is not on the stick, I can't deal with -rve (-RV -> -FRB) nor -rch (-FRP -> FRPB) here. I'll need to either:
+#   1. Edit the dictionary s.t. *FR = -rve, and fix all conflicts that causes
+#   2. Make my own steno system so I have more control over e/t (probably better)
+#   However, for now I can simply type v (*F) as a second stroke for -rve, and always use -nch for -rch.
+#   Doesn't cost me that much speed, and it will be easy to relearn if/when I fix this later.
 
-       if(stick=='r' && nm=='J' ) { nm <- ''; letters2append <- c('RJ', 'LG','*J', 'NG', 'NG') } # J = -PBLG, so how to add N (-PB) and L (-L) to make '-nge' & '-lge'?               Convert J to just -G. And '-mg' is never used so might as well also be '-nge'.
-  else if(stick=='r' && nm=='K' ) { nm <- ''; letters2append <- c('RK','*LG','*K','*NG','*NG') } # K = -BG,   so how to add N (-PB)            to make '-nk' (-PBG is already '-ng')? Convert K to *G.
-  else if(stick=='r' && nm=='FP') letters2append <- c('FRPB','L','*','FRPB','M'  ) # -FRPB = -rch/-nch both
-  else if(stick=='r' && nm=='*F') letters2append <- c('*FRB','L','*','N',   'M'  ) # -*FRB or -FRB = -rve
-  else if(stick=='r' && nm=='P' ) letters2append <- c('R',   'L','*','N',   'FRP') # -FRP = -mp
-  else if(stick=='r') letters2append <- c('R','L','*','N', 'M' )
-  else if(stick=='l') letters2append <- c('R','L','*','R*','L*')
-  else stop()
-  # Left stick has no countermotions for N/M because o/w it'd be impossible to get a * for words like "cLeRk" or "gLiMpse" where a countermotion is required on both sticks.
-  # Does it matter if I can't also get an asterisk for such words in one stroke? Maybe not, but N & M countermotions aren't really needed on left stick a/ws.
-
-  i1 <- imap[1]
-  i2 <- imap[2]
-  iN <- tail(imap,1)
-
-  clockwise <- i1 == i2-1 || i1==8 && i2==1 
-
-  if(clockwise)
-    return(list(c(     imap, iN-1             ),    # 1 (R-)
-                c(     imap, iN-1, iN         ),    # 1 misstroke
-                c(     imap, iN-1, iN-2       ),    # 2 (L-)
-                c(     imap, iN-1, iN-2, iN-1 ),    # 2 misstroke
-                c(     imap, iN-1, iN-2, iN-3 ),    # 2 misstroke
-                c( i1, imap                   ),    # 3 (*)
-                c( i1, imap, iN-1             ),    # 4 (R* or -N)
-                c( i1, imap, iN-1, iN         ),    # 4 misstroke
-                c( i1, imap, iN-1, iN-2       ),    # 5 (L* or -M)
-                c( i1, imap, iN-1, iN-2, iN-1 ),    # 5 misstroke
-                c( i1, imap, iN-1, iN-2, iN-3 )) |> # 5 misstroke
-           setNames(paste0(nm, letters2append[c(1,1,2,2,2,3,4,4,5,5,5)])))
-  else                                        # R R L L L * N N M M M
-    return(list(c(     imap, iN+1             ),
-                c(     imap, iN+1, iN         ),
-                c(     imap, iN+1, iN+2       ),
-                c(     imap, iN+1, iN+2, iN+1 ),
-                c(     imap, iN+1, iN+2, iN+3 ),
-                c( i1, imap                   ),
-                c( i1, imap, iN+1             ),
-                c( i1, imap, iN+1, iN         ),
-                c( i1, imap, iN+1, iN+2       ),
-                c( i1, imap, iN+1, iN+2, iN+1 ),
-                c( i1, imap, iN+1, iN+2, iN+3 )) |>
-           setNames(paste0(nm, letters2append[c(1,1,2,2,2,3,4,4,5,5,5)])))
-  stopifnot(F)
-}
-
-generate_2taps <- \(imap,nm,stick) {
-  if(stick=='l') nm <- paste0(nm,'*')
-  if(stick=='r') nm <- paste0('*',nm)
-  if(length(imap)==1) {
-    l <- list(c(imap[1],imap))
-    names(l) <- nm
-    l
-  }
-}
-
-# Walk a map with a window of 3. If are continuous, e.g. 1 2 3 or 7 6 5 etc, then create a misstroke version of the map, with the middle number in that window skipped.
-generate_skip_misstrokes <- \(imap, nm) {
-  generate_skip1_misstrokes <- \(imap, nm) { 
-    n <- length(imap)
-    if(n<3) return(NA)
-  
-    lapply(2:(n-1), \(i) {
-      window_of_3 <- imap[(i-1):(i+1)]
-      if(all(diff(window_of_3)==1) | all(diff(window_of_3)==-1))
-        imap[c(1:(i-1),(i+1):n)]
-    }) |>
-    `names<-`(rep(nm,n-2)) |>
-    Filter(f=Negate(is.null))
-  }
-  
-  skip1 <- generate_skip1_misstrokes(imap,nm)
-  skip2 <- unique(unlist(recursive=F, Map(generate_skip1_misstrokes, skip1,names(skip1))))
-  c(skip1,skip2)
-} #generate_skip_misstrokes(c(2,1,2,3,4,3,2,1,2),'hi') # Test
-
-# For code simplicity, generate_countermotions was allowed to go past the 1-8 range. Need to readjust the numbers.
-reframe_numbers <- \(imap) {
-  imap[imap<1] <- imap[imap<1]+8
-  imap[imap>8] <- imap[imap>8]-8
-  imap
-}
-
-# TODO: instead make a super-function of \(imap) generate_2taps() |> generate_countermotions() |> etc. and pass iMAPs to THAT?
-# Augment the base iMAPS
-iMAPS_l <- c(iMAPS_l, unlist(recursive=F,mapply( iMAPS_l, names(iMAPS_l), FUN=generate_countermotions, MoreArgs=list(stick='l') ))) |> Filter(f=is.numeric)
-iMAPS_l <- c(iMAPS_l, unlist(recursive=F,mapply( iMAPS_l, names(iMAPS_l), FUN=generate_2taps,          MoreArgs=list(stick='l') ))) |> Filter(f=is.numeric)
-iMAPS_l <- c(iMAPS_l, unlist(recursive=F,mapply( iMAPS_l, names(iMAPS_l), FUN=generate_skip_misstrokes                         ))) |> Filter(f=is.numeric)
-iMAPS_l <- lapply(iMAPS_l,reframe_numbers)
-names(iMAPS_l) <- sub('.*\\.','',names(iMAPS_l)) # NOTE: when dup names, R.nvim can only print the first item w/ that name. To get all entries of a name, need to do iMAPS[names(iMAPS)==nm].
-MAPS_l <- lapply(iMAPS_l, \(imap) setNames(names(dirs),dirs)[imap])
-
-iMAPS_r <- c(iMAPS_r, unlist(recursive=F,mapply( iMAPS_r, names(iMAPS_r), FUN=generate_countermotions, MoreArgs=list(stick='r') ))) |> Filter(f=is.numeric)
-iMAPS_r <- c(iMAPS_r, unlist(recursive=F,mapply( iMAPS_r, names(iMAPS_r), FUN=generate_skip_misstrokes                         ))) |> Filter(f=is.numeric)
-iMAPS_r <- lapply(iMAPS_r,reframe_numbers)
-names(iMAPS_r) <- sub('.*\\.','',names(iMAPS_r))
-MAPS_r <- lapply(iMAPS_r, \(imap) setNames(names(dirs),dirs)[imap])
-
-# Note ul & dr are most comfy positions on left stick, and ur & dl are most comfy on right.
-#hist(unlist(iMAPS_l))
-#hist(unlist(iMAPS_r))
-
+sub2  <- \(x,pattern,replacement)  sub(pattern,replacement,x) # More convenient for piping
+gsub2 <- \(x,pattern,replacement) gsub(pattern,replacement,x) # More convenient for piping
 translate_to_proper_steno_grammar <- \(strokes, stick) {
   if(!(stick %in% c('left','right'))) stop('Invalid stick name.')
-  sub2  <- \(x,pattern,replacement)  sub(pattern,replacement,x) # More convenient for piping
-  gsub2 <- \(x,pattern,replacement) gsub(pattern,replacement,x) # More convenient for piping
-
   if(stick=='left') {
     strokes <- strokes |>
       sub2('D' ,'TK'   ) |>
@@ -244,18 +151,61 @@ translate_to_proper_steno_grammar <- \(strokes, stick) {
   strokes <- paste(strokes,collapse='')
 }
 
-names(MAPS_l) <- sapply(names(MAPS_l), translate_to_proper_steno_grammar, "left")
-names(MAPS_r) <- sapply(names(MAPS_r), translate_to_proper_steno_grammar, "right")
-#tmp <- sapply(unique(names(MAPS_r)), translate_to_proper_steno_grammar, "right")
-#tmp <- data.frame(b4=names(tmp),aft=tmp)
+names(mapsl) <- sapply(names(mapsl), translate_to_proper_steno_grammar,  'left')
+names(mapsr) <- sapply(names(mapsr), translate_to_proper_steno_grammar, 'right')
 
 # Generate the plover_controller file
 map2string <- \(map,nm,stick) {
-  if(!(stick %in% c("left","right"))) stop("Invalid stick name.")
-  paste0(stick,"(",paste(map,collapse=','),") -> ",nm)
+  if(!(stick %in% c('left','right'))) stop('Invalid stick name.')
+  paste0(stick,'(',paste(map,collapse=','),') -> ',nm)
 }
 
-c(mapply(MAPS_l,names(MAPS_l), FUN = \(map,nm) map2string(map,nm,"left")),
-  mapply(MAPS_r,names(MAPS_r), FUN = \(map,nm) map2string(map,nm,"right"))) |>
+c(mapply(mapsl,names(mapsl), FUN = \(map,nm) map2string(map,nm,'left')),
+  mapply(mapsr,names(mapsr), FUN = \(map,nm) map2string(map,nm,'right'))) |>
 writeLines('booger.txt')
+
+
+library(jsonlite)
+# Need num dictionary.
+# To do that, make list where
+#   nms are strokes w/ plover-auto-transl'd #s,
+#   els are what you actually finna get typed
+# 1. Get w/e is ul, u, ur, l, etc. on RHS, add '#' to it, set transl to 1234 etc.
+#   a. Also {&0.1} {&0.2} etc.
+#   b. Also LHS S to names and then {super(1)} {super(2)} etc.
+# 2. Transl the nms from #S.. #T... -> 1... 2... as plover would
+ns   <- c(`-U`='0',ul='1',u='2',ur='3',l='4',`*`='5',r='6',dl='7',d='8',dr='9')
+m <- sapply(names(ns),'==',mapsr)
+names(ns)[col(m)[m]] <- rownames(m)[row(m)[m]]
+names(ns) <- sub('##','#',paste0('#',names(ns)))
+ns
+
+wss <- sapply(ns, \(n) paste0('{#super(',n,')}'))
+names(wss) <- sub('#','#S',names(wss))
+wss
+
+decs <- sapply(ns, \(n) paste0('{&0.',n,'}'))
+names(decs) <- sub('#','#PH',names(decs))
+decs
+
+# Could be more generalized but idc
+simulate_plover_num_conversion <- \(stroke) if(!grepl('#',stroke)) {stroke} else {
+
+  lhs <- strsplit(stroke,'-|\\*')[[1]][1]
+  rhs <- strsplit(stroke,'-|\\*')[[1]][2]
+  if(grepl('\\*',stroke)) lhs <- lhs |> paste0('*') # sloppy fix to not lose *
+
+  if(!grepl('O|S|T|P|H|A',lhs) & !grepl('F|P|L|T',rhs)) {stroke} else {
+    paste0(
+      lhs |> sub2('#','') |> sub2('O',0) |> sub2('S',1) |> sub2('T',2) |> sub2('P',3) |> sub2('H',4) |> sub2('A',5),
+      rhs |> sub2('F',6 ) |> sub2('P',7) |> sub2('L',8) |> sub2('T',9)
+    ) |> sub2('NA$','') # sloppy fix 4 when rhs is empty
+  }
+}
+
+ns2 <- c(ns,wss,decs)
+names(ns2) <- sapply(names(ns2), simulate_plover_num_conversion)
+ns2
+
+write_json(as.list(ns2), 'numbers.json', auto_unbox=T,pretty=T)
 
