@@ -33,13 +33,13 @@ def buttons_to_keys(
 
 
 def stick_segment(
-    stick_dead_zone: float,
+    stick_deadzone: float,
     offset: float,
     segment_count: int,
     lr: float,
     ud: float,
 ) -> Optional[int]:
-    if hypot(lr, ud) < stick_dead_zone * sqrt(2):
+    if hypot(lr, ud) < stick_deadzone * sqrt(2):
         return None
     offset = offset / 360 * tau
     angle = atan2(ud, lr) - offset

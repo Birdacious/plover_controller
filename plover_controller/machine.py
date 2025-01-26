@@ -23,7 +23,8 @@ import ctypes
 import typing
 from plover_controller.config import (
     Stick,
-    Mappings,
+    Trigger,
+    Mappings
 )
 from .util import stick_segment, buttons_to_keys
 from copy import copy
@@ -262,7 +263,7 @@ class ControllerState:
     _hat_states: dict[str, int] = {}
     # Keys fully triggered by completed chords
     _pending_keys: set[str] = set()
-    _pending_stick_movements: dict[str, list[str]] = {}
+    _pending_movements: dict[str, list[str]] = {}
     _pending_hat_values: dict[str, set[int]] = {}
     _unsequenced_buttons_and_hats: set[str] = set()
     # All buttons currently pressed
@@ -270,8 +271,9 @@ class ControllerState:
     _currently_uncentered_hats: set[str] = set()
     # Function called with stroke data when complete
     _notify: Callable[[list[str]], None]
-    # Whether a stick was in the deadzone in the previous check
+    # Whether a stick/trigger was in the deadzone in the previous check
     _fresh_from_deadzone: dict[str, bool] = {}
+
 
     def __init__(self, params: dict[str, Any], notify: Callable[[list[str]], None]):
         super().__init__()
@@ -280,28 +282,21 @@ class ControllerState:
         self._notify = notify
 
     def _handle_event(self, event: Event):
-        if isinstance(event, AxisEvent):
-            self._handle_axis_event(event)
-        elif isinstance(event, BallEvent):
-            self._handle_ball_event(event)
-        elif isinstance(event, HatEvent):
-            self._handle_hat_event(event)
-        elif isinstance(event, ButtonEvent):
-            self._handle_button_event(event)
-        elif isinstance(event, DeviceEvent):
-            self._handle_device_event(event)
+        if   isinstance(event,   AxisEvent): self._handle_axis_event(event)
+        elif isinstance(event,   BallEvent): self._handle_ball_event(event)
+        elif isinstance(event,    HatEvent): self._handle_hat_event(event)
+        elif isinstance(event, ButtonEvent): self._handle_button_event(event)
+        elif isinstance(event, DeviceEvent): self._handle_device_event(event)
 
     def _handle_axis_event(self, event: AxisEvent):
         axis = f"a{event.axis}"
-        if axis in self._mappings.triggers:
-            self._trigger_states[axis] = event.value
-        elif axis in set(
-            itertools.chain(
-                map(lambda stick: stick.x_axis, self._mappings.sticks.values()),
-                map(lambda stick: stick.y_axis, self._mappings.sticks.values()),
-            ),
-        ):
+
+        if axis in {trigger.axis for trigger in self._mappings.triggers.values()}:
+            self._trigger_states[axis] = (event.value+1)/2 # TODO?: Maybe it's just my ctrlr but the trigger values range from -1 to 1
+
+        elif axis in {stick.x_axis for stick in self._mappings.sticks.values()} | {stick.y_axis for stick in self._mappings.sticks.values()} :
             self._stick_states[axis] = event.value
+
         self.check_axes()
         self.maybe_complete_stroke()
 
@@ -362,39 +357,37 @@ class ControllerState:
           self._currently_uncentered_hats
       )
 
-    def process_stick_movements(self):
-        if self.any_active_inputs():
-            return
+    def process_movements(self):
         def process(start_idx,end_idx):
-            if start_idx-end_idx == 0:
-                for key in pending_movements[start_idx:len(pending_movements)]:
-                    self._unsequenced_buttons_and_hats.add(key)
-            else:
+            if start_idx < end_idx:
                 result = self._mappings.ordered_mappings.get(tuple( pending_movements[start_idx:end_idx] ))
-                if result is not None:
+                if result is None:
+                    process(start_idx, end_idx-1)
+                else:
                     self._pending_keys.update(result)
                     process(end_idx, len(pending_movements))
-                else:
-                    process(start_idx, end_idx-1)
-        for stick in self._mappings.sticks.values():
-            pending_movements = self._pending_stick_movements.get(stick.name, [])
-            if(len(pending_movements)<20):
+
+            elif start_idx==end_idx:
+               for key in pending_movements[start_idx:len(pending_movements)]:
+                   self._unsequenced_buttons_and_hats.add(key)
+
+        for stick_or_trigger in [stick for stick in self._mappings.sticks.values()] + [trigger for trigger in self._mappings.triggers.values()]:
+            pending_movements = self._pending_movements.get(stick_or_trigger.name, [])
+            if(len(pending_movements)<30): # To avoid hitting the recursion limit.
               process(0, len(pending_movements))
-            self._pending_stick_movements[stick.name] = []
+            self._pending_movements[stick_or_trigger.name] = []
 
     def maybe_complete_stroke(self):
-        self.process_stick_movements()
-        if self.any_active_inputs():
-            return
+        if self.any_active_inputs(): return
+        self.process_movements()
         keys = buttons_to_keys(
             self._unsequenced_buttons_and_hats,
             self._mappings.unordered_mappings,
         ).union(self._pending_keys)
         self._unsequenced_buttons_and_hats.clear()
-        self._pending_stick_movements.clear()
+        self._pending_movements.clear()
         self._pending_keys.clear()
-        if keys:
-            self._notify(list(keys))
+        if keys: self._notify(list(keys))
 
     def check_axes(self):
         for stick in self._mappings.sticks.values():
@@ -402,31 +395,68 @@ class ControllerState:
             ud = self._stick_states.get(stick.y_axis, 0.0)
             self.check_stick(stick, lr, ud)
         for trigger in self._mappings.triggers.values():
-            val = self._trigger_states.get(trigger.actual, 0)
-            if val > 0:
-                self._unsequenced_buttons_and_hats.add(trigger.renamed)
+            ud = self._trigger_states.get(trigger.axis, 0.0)
+            self.check_trigger(trigger, ud)
 
     def check_stick(self, stick: Stick, lr: float, ud: float):
+        if stick.name not in self._pending_movements:   self._pending_movements[stick.name] = []
+        if stick.name not in self._fresh_from_deadzone: self._fresh_from_deadzone[stick.name] = True
+
         segment_index = stick_segment(
-            stick_dead_zone=self._params["stick_dead_zone"],
+            stick_deadzone=self._params["stick_deadzone"],
             offset=stick.offset,
             segment_count=len(stick.segments),
             lr=lr,
-            ud=ud,
-        )
-        if stick.name not in self._pending_stick_movements:
-            self._pending_stick_movements[stick.name] = []
-        if stick.name not in self._fresh_from_deadzone:
-            self._fresh_from_deadzone[stick.name] = True
+            ud=ud)
         if segment_index is not None:
             direction = stick.segments[segment_index]
             segment_name = f"{stick.name}{direction}"
-            inorder_list = self._pending_stick_movements[stick.name]
-            if len(inorder_list) == 0 or self._fresh_from_deadzone[stick.name] or segment_name != inorder_list[-1]:
-                inorder_list.append(segment_name)
+            if (len(self._pending_movements[stick.name]) == 0 or
+                self._fresh_from_deadzone[stick.name] or
+                segment_name != self._pending_movements[stick.name][-1]):
+                self._pending_movements[stick.name].append(segment_name)
             self._fresh_from_deadzone[stick.name] = False
         else:
             self._fresh_from_deadzone[stick.name] = True
+
+    def check_trigger(self, trigger: Trigger, ud: float):
+        if trigger.name not in self._pending_movements:   self._pending_movements[trigger.name] = []
+        if trigger.name not in self._fresh_from_deadzone: self._fresh_from_deadzone[trigger.name] = True
+
+        lite_press_nm = f"{trigger.name}l"
+        hard_press_nm = f"{trigger.name}h"
+
+        # Hard press
+        if (ud > self._params["trigger_deadzone_h"] and
+        (len(self._pending_movements[trigger.name]) == 0 or
+         self._pending_movements[trigger.name][-1] != hard_press_nm or
+         self._fresh_from_deadzone[trigger.name])):
+
+            # To avoid unintuitive behavior when you PRESS the trigger so fast you go straight from unpressed to zone_h in less than one tick.
+            if len(self._pending_movements[trigger.name]) == 0:
+                self._pending_movements[trigger.name].append(lite_press_nm)
+
+            self._pending_movements[trigger.name].append(hard_press_nm)
+            self._fresh_from_deadzone[trigger.name] = False
+
+        # Light press
+        elif (ud > self._params["trigger_deadzone_l"] and ud < self._params["trigger_deadzone_h"] and
+        (len(self._pending_movements[trigger.name]) == 0 or
+         self._pending_movements[trigger.name][-1] != lite_press_nm or
+         self._fresh_from_deadzone[trigger.name])):
+            self._pending_movements[trigger.name].append(lite_press_nm)
+            self._fresh_from_deadzone[trigger.name] = False
+
+        # In deadzone
+        elif ud < self._params["trigger_deadzone_l"]:
+
+            self._fresh_from_deadzone[trigger.name] = True
+
+            # To avoid unintuitive behavior when you RELEASE the trigger so fast you go straight from zone_h to unpressed in less than one tick.
+            if (len(self._pending_movements[trigger.name]) != 0 and
+            self._pending_movements[trigger.name][-1] == hard_press_nm):
+                self._pending_movements[trigger.name].append(lite_press_nm)
+
 
 
 class ControllerMachine(StenotypeBase):
@@ -472,8 +502,9 @@ class ControllerMachine(StenotypeBase):
         return {
             "mapping": (DEFAULT_MAPPING, str),
             "timeout": (1.0, float),
-            "stick_dead_zone": (0.6, float),
-            "trigger_dead_zone": (0.9, float),
+            "stick_deadzone": (0.6, float),
+            "trigger_deadzone_l": (0.20, float),
+            "trigger_deadzone_h": (0.95, float),
             "stroke_end_threshold": (0.4, float),
             "use_hidapi": (True, boolean),
             "use_rawinput": (False, boolean),
@@ -494,8 +525,9 @@ class ControllerOption(QGroupBox):
 
     SPIN_BOXES = {
         "timeout": "Timeout:",
-        "stick_dead_zone": "Stick dead zone:",
-        "trigger_dead_zone": "Trigger dead zone:",
+        "stick_deadzone": "Stick dead zone:",
+        "trigger_deadzone_l": "Trigger dead zone (Light):",
+        "trigger_deadzone_h": "Trigger dead zone (Hard):",
         "stroke_end_threshold": "Stroke end threshold:",
     }
 
@@ -680,7 +712,7 @@ class StickWidget(QWidget):
         painter.setPen(QPen(Qt.lightGray, 1, Qt.DotLine))
         draw_deadzone(self.state._params["stroke_end_threshold"] * sqrt(2))
         painter.setPen(QPen(Qt.darkGray, 1, Qt.DotLine))
-        draw_deadzone(self.state._params["stick_dead_zone"] * sqrt(2))
+        draw_deadzone(self.state._params["stick_deadzone"] * sqrt(2))
 
         angle = self.stick.offset / 360 * tau - tau / 4
         step = tau / len(self.stick.segments)

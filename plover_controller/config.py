@@ -16,6 +16,7 @@ class Stick:
 class Trigger:
     name: str
     axis: str
+    segments: list[str]
 
 
 @dataclass
@@ -27,9 +28,9 @@ class Alias:
 @dataclass
 class Mappings:
     sticks: dict[str, Stick]
-    hats: dict[str, Alias]
+    triggers: dict[str, Trigger]
     buttons: dict[str, Alias]
-    triggers: dict[str, Alias]
+    hats: dict[str, Alias]
     unordered_mappings: list[tuple[list[str], tuple[str, ...]]]
     ordered_mappings: dict[tuple[str, ...], tuple[str, ...]]
 
@@ -48,12 +49,8 @@ class Mappings:
     def parse(cls, text: str) -> "Mappings":
         result = Mappings.empty()
         for line in text.splitlines():
-            if not line or line.startswith("//"):
-                continue
-            if match := re.match(
-                r"(\w+) stick has segments \(([a-z,]+)\) on axes (\d+) and (\d+) offset by ([0-9-.]+) degrees",
-                line,
-            ):
+            if not line or line.startswith("//"): continue
+            if match := re.match( r"(\w+) stick has segments \(([a-z,]+)\) on axes (\d+) and (\d+) offset by ([0-9-.]+) degrees", line):
                 stick = Stick(
                     name=match[1],
                     x_axis=f"a{match[3]}",
@@ -83,11 +80,12 @@ class Mappings:
                 )
                 result.hats[alias.actual] = alias
             elif match := re.match(r"trigger on axis (\d+) is ([a-z0-9]+)", line):
-                alias = Alias(
-                    renamed=match[2],
-                    actual=f"a{match[1]}",
+                trigger = Trigger(
+                    name=match[2],
+                    axis=f"a{match[1]}",
+                    segments=["l","h"]
                 )
-                result.triggers[alias.actual] = alias
+                result.triggers[trigger.name] = trigger
             else:
                 print(f"don't know how to parse '{line}', skipping")
         return result
