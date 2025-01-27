@@ -1,12 +1,20 @@
+# Hi
+
+This is my personal fork of plover_controller. This is not intended for others to use but you are welcome to if you find it helpful.
+
+This fork does not resolve the motions you make on your stick until your chord is complete (i.e. all buttons released).
+This allows you to handle motions like going left-right straight across the deadzone, or double-tapping in the same direction.
+
+This fork contains a modified version of plover's default steno system to add -K (hard k sound) and -C (ch sound) on the right side.
+<!- Useful because for example, normally -LG means -lj/-lch and \*LG means -nk; I have -L mapped to my right trigger; I want to think about things phonetically so I ... FIXME bah find better words to explain ->
+
+
+
 # 🎮 plover_controller
 
 This plugin was designed for use with [Open Steno Project's Plover](https://openstenoproject.org).
 With only a video game controller, you can harness the power of machine stenography, a shorthand writing system that's been proven effective since its inception in 1879.
 To this day, stenography is trusted for use in live captioning and court reporting, due to its high speed and accuracy.
-
-
-> [!WARNING]
-> plover_controller may not work on macOS. Only Windows and Linux have been tested successfully.
 
 ## Table of Contents
 
@@ -144,8 +152,3 @@ Any problems will most likely be due to your button map. The best way to resolve
 | A Button                 | -S       |
 | Y Button                 | -D       |
 | B Button                 | -Z       |
-
-## Default mapping image
-
-![Default mapping](https://github.com/tadeokondrak/plover_controller/assets/4098453/f2883413-c177-4c0c-80aa-778b11a5173b)
-
