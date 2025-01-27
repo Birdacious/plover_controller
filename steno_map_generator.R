@@ -1,107 +1,77 @@
-# V should NOT be double tap, b/c it's never used in non-R/L clusters. (ever, evil sure, but evp, evt, evm, evn
-# Although LHS V never combos w/ a/t, RHS v is full of combos (cavern, govt, covet, cavity, scavenge, aversion...). So it could deserve the double-tap spot for RHS's sake.
-#
-# Since L is taken care of by double taps, the next most-combos guy is M & N. Now THEY can take a nice spot on the stick, l or r.
-# Let's try to make this maximally forgving. So, cross-deadzone motions should have 3 sectors of forgiveness. Only 1 motion to the clockwise/counterclockwise.
-#   That way I can just FLY w/o worrying about finger accuracy.
-#   And for speed, no double-tap into cross-deadzone, only double-tap into motion.
-#   This is enough restrictions that I think I could list out e/ motion now:
-#     u d l r ur dr ul dl
-#     double taps of each
-#     cross-deadzones of each
-#     clockwise/counter-clockwise of each
-#     double tap + clockwise/counter-clockwise of each.
-#     Total: 8 * 2 * 2 * 2 * 2 = 2^7 = 128, minus some uncomfortable exceptions like LHS ur ur u or ur ur r. That'll do!
-#   Aren't I wasting some potential of the # of possibilities the sticks have though?
-#     No, it's fine. You start with this simple base, and then you can always make exceptions later for the longer motions that are easy to do accurately.
-#
-# LK LG are same. But KR/KL and GR/GL are not.
-#   So, G can be in a place difficult to double-tap-ish on RHS. That's RHS dr.
-#   But LJ is still used. So 
-#   Also need NG. MG doesn't exist. Cross-deadzone seems good for this. And it's uncomfy to do this cdz on LHS too so even perfecter spot.
-#   LHS has gl- but no jl-. RHS has -lj but no -lg. This means I can replace double-tap + motion to be s/t else.
-
-mapsl <- list( # Trigger: S-    Shoulder: R-
-  `#`='ur', # NO other motions from ur, too uncomfy  
+mapsl <- list( # Shoulder: S-    Trigger: R- & HR-
+  `#`='ur', # no other motions from ur, too uncomfy  
     `#`=c('ur','u'), # misstroke
-  G='dl', GL=c('dl','dl'),
+  G='dl',
+    G=c('dl','d'), # misstroke
     J=c('dl','l'), Y=c('dl','l','ul'),
       J=c('dl','l','dl'), # misstroke
-    G=c('dl','d'), # misstroke
-  M='r', W=c('r','r'), WH=c('r','r','ur'),
-      D=c('r','dr'), # misstroke
+  M='r', W=c('r','r'), WH=c('r','r','dr'),
       N=c('r','ur'),
+      D=c('r','dr'), # misstroke
     SPW=c('r','l'), #ent-/int-
       SPW=c('r','ul'), SPW=c('r','dl'), # misstrokes
     KW=c('r','r','ur','u'),
-  P='ul', PL=c('ul','ul'),
+  P='ul',
     P=c('ul','u'), # misstroke
-  K='u', KL=c('u','u'),
+  K='u',
     X=c('u','ul'),
-    CH=c('u','ur'), KM=c('u','ur','r'),
+    C=c('u','ur'), KM=c('u','ur','r'),
   T='l', F=c('l','l'),
     T=c('l','dl'), # misstroke
-    TW=c('l','r'), FL=c('l','l','r'), # No need to double-tap for TW, since TM- doesn't exist. What to do about -lmt on RHS? RHS has F on shoulder button so this spot frees up.
+    TW=c('l','r'), # No need to double-tap for TW, since TM- doesn't exist.
       TW=c('l','ur'), TW=c('l','dr'), # misstrokes
-      FL=c('l','l','ur'), FL=c('l','l','dr'), # misstrokes
-    TH=c('l','ul'), V=c('l','l','ul'),
-  D='dr', DL=c('dr','dr'),
-    B=c('dr','r'), BL=c('dr','dr','r'),
-  H='d', L=c('d','d'),
-    DL=c('d','dr'), BL=c('d','dr','r'), # Easier to reach DL & BL this way
+    TH=c('l','ul'),
+      V=c('l','l','ul'),
+  D='dr',
+    B=c('dr','r'),
+  H='d',
     Z=c('d','dl')
 )
 
-mapsr <- list( # Trigger: -F    Shoulder: -R
-  `#`='ul', # and NO other motions from ul, too uncomfy
+mapsr <- list( # Shoulder: -F    Trigger: -R & -L
+  `#`='ul', # no other motions from ul, too uncomfy
     `#`=c('ul','u'), # misstoke
-  M='l', #`*NG`=c('u','u'), # M=-PL so LM doesn't actually exist oh RHS either!
+  M='l', #`*NG`=c('u','u'),
     N=c('l','ul'),
-      NL=c('u','u','ul'), # vuln, anlysis
     MT=c('l','r'),
     D=c('l','dl'), # misstroke
-  G='dr', LG=c('dr','dr'), # -gl-
+  G='dr',
     J=c('dr','r'),
-      LG=c('dr','dr','r'), # -lj
-    #Y=c('dr','d'),
     NG=c('dr','ul'),
       NG=c('dr','u'), NG=c('dr','l'), # misstrokes
-  P='ur', #PL=c('u','u'),
-    `*PL`=c('ur','u'), # -mp # Or, 'ur','l' accurate enough?
-  T='r', LT=c('r','r'),
-    NT=c('r','l'), `*PBT`=c('r','r','l'), # -nt, ^n't / -nth / -ngth
+  P='ur',
+    `*PL`=c('ur','u'), # -mp
+    `*PL`=c('ur','dl'), # Another option, slower, but more consistent with how other N/M combos work. 
+      `*PL`=c('ur','d'), `*PL`=c('ur','l'), # misstrokes
+  T='r',
+    NT=c('r','l'), # -nt
       NT=c('r','ul'), NT=c('r','dl'), # misstrokes
-      `*PBT`=c('r','r','ul'),`*PBT`=c('r','r','dl'), # misstrokes
+    `*NT`=c('r','r','l'), # ^n't / -nth / -ngth 
+      `*NT`=c('r','r','ul'),`*NT`=c('r','r','dl'), # misstrokes
     `*T`=c('r','ur'), V=c('r','r','ur'),
-  D='dl', LD=c('dl','dl'),
-    LD=c('dl','dl','d'), LD=c('d','dl','dl'), # misstrokes
-    B=c('dl','l'), LB=c('dl','dl','l'),
+  D='dl',
+    B=c('dl','l'),
     ND=c('dl','ur'),
       ND=c('dl','u'), ND=c('dl','r'), # misstrokes
-  K='u', `*LG`=c('u','u'), # Note: *LG is -lk, LG is -lch/-lj. *PBG is -nk, PBG is -ng. GT is very common -ct.
-    FP=c('u','ur'), KT=c('u','ur','r'), # -ch, -ct
-      LG=c('u','u','ur'), # -lch/lj or -gl-
-      FRPB=c('u','ur','dl'), # -rch/-nch
-        FRPB=c('u','ur','d'), FRPB=c('u','ur','l'), # misstrokes
-    `*NG`=c('u','d'), # -nk
-      `*NG`=c('u','dl'), `*NG`=c('u','dr'), # misstrokes
+  K='u',
+    C=c('u','ur'), KT=c('u','ur','r'), # -ch, -ct
+      NC=c('u','ur','dl'), # TODO: this motion sucks. Do some rearranging so that K is not so overloaded and you have room to make this easier.
+        NC=c('u','ur','d'), NC=c('u','ur','l'), # misstrokes
+    NK=c('u','d'),
+      NK=c('u','dl'), NK=c('u','dr'), # misstrokes
     GS=c('u','ul'), X=c('u','ul','l'), # -shun, -kshun
-  S='d', L=c('d','d'),
-    L=c('d','d','dr'), # misstroke
+  S='d',
     Z=c('d','dl'),
-      LS=c('d','d','dl'), LZ=c('d','d','dl','l'),
-    RB=c('d','dr')
+    RB=c('d','dr') # -sh
 )
 
-#STKPWHR AO*EU FRPBLGTSDZ
+#STKPWHR AO*EU FRPBLKCGTSDZ
 
-# What if -K  & -rch/-nch, and I want to add D/S/Z to it?
-#   Doesn't matter. Just add the D/S/Z in the next stroke. No workd ending w/ -K or -rch/-nch needs an S or D in it as part of the base word's spelling that can't just be added as a postfix in a separate stroke.
-
-# TODO: because -R is not on the stick, I can't deal with -rve (-RV -> -FRB) nor -rch (-FRP -> FRPB) here. I'll need to either:
+# TODO: because -R is not on the stick, I can't deal with -rve (-RV -> -FRB). I'll need to either:
 #   1. Edit the dictionary s.t. *FR = -rve, and fix all conflicts that causes
-#   2. Make my own steno system so I have more control over e/t (probably better)
-#   However, for now I can simply type v (*F) as a second stroke for -rve, and always use -nch for -rch.
+#   2. Deal with it and just memorize that -F + -RB (-sh) = -rve
+#   2. Edit custom steno system
+#   However, for now I can simply type v (*F) as a second stroke for -rve
 #   Doesn't cost me that much speed, and it will be easy to relearn if/when I fix this later.
 
 sub2  <- \(x,pattern,replacement)  sub(pattern,replacement,x) # More convenient for piping
@@ -110,28 +80,26 @@ translate_to_proper_steno_grammar <- \(strokes, stick) {
   if(!(stick %in% c('left','right'))) stop('Invalid stick name.')
   if(stick=='left') {
     strokes <- strokes |>
-      sub2('D' ,'TK'   ) |>
-      sub2('B' ,'PW'   ) |>
-      sub2('L' ,'HR'   ) |>
-      sub2('CH','KH'   ) |>
-      sub2('M' ,'PH'   ) |>
-      sub2('F' ,'TP'   ) |>
-      sub2('Q' ,'KW'   ) |>
-      sub2('N' ,'TPH'  ) |>
-      sub2('V' ,'SR'   ) |>
-      sub2('G' ,'TKPW' ) |>
-      sub2('J' ,'SKWR' ) |>
-      sub2('Y' ,'KWR'  ) |>
-      sub2('X' ,'KP'   ) |>
-      sub2('Z' ,'STKPW')
+      sub2('D','TK'   ) |>
+      sub2('B','PW'   ) |>
+      sub2('L','HR'   ) |>
+      sub2('C','KH'   ) |>
+      sub2('M','PH'   ) |>
+      sub2('F','TP'   ) |>
+      sub2('Q','KW'   ) |>
+      sub2('N','TPH'  ) |>
+      sub2('V','SR'   ) |>
+      sub2('G','TKPW' ) |>
+      sub2('J','SKWR' ) |>
+      sub2('Y','KWR'  ) |>
+      sub2('X','KP'   ) |>
+      sub2('Z','STKPW')
     steno_order <- c('#','S','T','K','P','W','H','R','*')
     strokes <- steno_order[sort(match(strsplit(strokes,'')[[1]],steno_order))]
     strokes <- paste(c(strokes,'-'),collapse='')
   }
   if(stick=='right') {
     strokes <- strokes |>
-      sub2('K' ,'BG'  ) |>
-      sub2('CH','FP'  ) |>
       sub2('M' ,'PL'  ) |>
       sub2('N' ,'PB'  ) |>
       sub2('J' ,'PBLG') |>
@@ -165,6 +133,7 @@ c(mapply(mapsl,names(mapsl), FUN = \(map,nm) map2string(map,nm,'left')),
 writeLines('booger.txt')
 
 
+# FIXME this broke since I changed how numbers work in the new steno system
 library(jsonlite)
 # Need num dictionary.
 # To do that, make list where
