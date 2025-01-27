@@ -462,9 +462,9 @@ class ControllerState:
 class ControllerMachine(StenotypeBase):
     KEYMAP_MACHINE_TYPE = "TX Bolt"
     KEYS_LAYOUT = """
-        #  #  #  #  #  #  #  #  #  #
-        S- T- P- H- * -F -P -L -T -D
-        S- K- W- R- * -R -B -G -S -Z
+        #  #  #  #  #  #  #  #        #  #
+        S- T- P- H- * -F -P -L -K    -T -D
+        S- K- W- R- * -R -B    -C -G -S -Z
                A- O- -E -U
     """
 
