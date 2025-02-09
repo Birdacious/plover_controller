@@ -68,8 +68,8 @@ class Mappings:
             #   lstick(dl,l,ul) + button_a + rtrig(l) -> SKR-
             #   would get added to mapping like so:
             #   m.mappings[(('lstickdl','lstickl','lstickul'), ('button_a'), ('rtrigl'))] = ('S-','K-','R-')
-            elif match := re.match(r"(\w+(?:\([a-z,]+\))?(?: \+ \w+(?:\([a-z,]+\))?)*) -> ([A-Z-*#]+)", line): # disgusting *barfs*
-                inputs = match[1].split(' + ')
+            elif match := re.match(r"(\w+(?:\([a-z,]+\))?(?: *\+ *\w+(?:\([a-z,]+\))?)*) -> ([A-Z-*#]+)", line): # disgusting *barfs*
+                inputs = match[1].split('+').strip()
                 result = []
                 for input in inputs:
                     match2 = re.match(r"(\w+)\(([a-z,]+)\)", input)
