@@ -1,12 +1,18 @@
-# Hi
-
-This is my personal fork of plover_controller. This is not intended for others to use but you are welcome to if you find it helpful.
+# This fork
 
 This fork does not resolve the motions you make on your stick until your chord is complete (i.e. all buttons released).
-This allows you to handle motions like going left-right straight across the deadzone, or double-tapping in the same direction.
+This allows you to __map motions going through the deadzone__ like stick(l,r), __including double-taps__ in the same direction like stick(l,l), etc..
 
-This fork contains a modified version of plover's default steno system to add -K (hard k sound) and -C (ch sound) on the right side.
-<!- Useful because for example, normally -LG means -lj/-lch and \*LG means -nk; I have -L mapped to my right trigger; I want to think about things phonetically so I ... FIXME bah find better words to explain ->
+This also allows you to __map combinations of buttons__ to a certain input, like 'b + left(l,ul) -> #'.
+Example where this is useful: in Plover theory, -r = -R and -v = *F, but -rve = -FRB.
+Rules like this were invented to help make typical steno keyboards more compact/efficient, but are not relevant on a controller.
+I don't want the overhead of remembering these rules, I simply want a button that sounds like -r, one that sounds like -v, and when I press them together they should be -rve.
+
+Note: longest combinations are resolved first.
+If you have two combinations of same length like 'a + b -> z' and 'a + c -> y', and press a+b+x, one will be chosen arbitrarily.
+To avoid ambiguity, you could simply add a combination like 'a + b + c -> x'.
+
+Below is `plover_controller`'s original README:
 
 
 

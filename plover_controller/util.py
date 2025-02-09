@@ -18,20 +18,6 @@ def get_keys_for_stroke(stroke_str: str) -> tuple[str, ...]:
             keys.append(f"{key}-")
     return tuple(keys)
 
-
-def buttons_to_keys(
-    in_keys: set[str],
-    unordered_mappings: list[tuple[list[str], tuple[str, ...]]],
-) -> set[str]:
-    keys = set[str]()
-    for chord, result in unordered_mappings:
-        if all(map(lambda x: x in in_keys, chord)):
-            for key in chord:
-                in_keys.remove(key)
-            keys.update(result)
-    return keys
-
-
 def stick_segment(
     stick_deadzone: float,
     offset: float,

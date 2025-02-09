@@ -26,7 +26,7 @@ from plover_controller.config import (
     Trigger,
     Mappings
 )
-from .util import stick_segment, buttons_to_keys
+from .util import stick_segment
 from copy import copy
 from plover.engine import StenoEngine
 from plover.gui_qt.tool import Tool
@@ -251,29 +251,23 @@ class ControllerThread(threading.Thread):
 
 
 class ControllerState:
-    # Machine settings
-    _params: dict[str, Any] = {}
-    # Parsed configuration file
-    _mappings: Mappings = Mappings.empty()
-    # Last received axis values for mapped sticks, keyed by a{int}
-    _stick_states: dict[str, float] = {}
-    # Last received axis values for mapped triggers, keyed by a{int}
-    _trigger_states: dict[str, float] = {}
-    # Last received values for hats, keyed by alias
-    _hat_states: dict[str, int] = {}
-    # Keys fully triggered by completed chords
-    _pending_keys: set[str] = set()
-    _pending_movements: dict[str, list[str]] = {}
-    _pending_hat_values: dict[str, set[int]] = {}
-    _unsequenced_buttons_and_hats: set[str] = set()
-    # All buttons currently pressed
-    _currently_pressed_buttons: set[str] = set()
-    _currently_uncentered_hats: set[str] = set()
-    # Function called with stroke data when complete
-    _notify: Callable[[list[str]], None]
-    # Whether a stick/trigger was in the deadzone in the previous check
-    _fresh_from_deadzone: dict[str, bool] = {}
+    _params: dict[str, Any] = {}           # Machine settings
+    _mappings: Mappings = Mappings.empty() # Parsed configuration file
+    _stick_states: dict[str, float] = {}   # Last received axis values for mapped sticks, keyed by a{int}
+    _trigger_states: dict[str, float] = {} # Last received axis values for mapped triggers, keyed by a{int}
+    _hat_states: dict[str, int] = {}       # Last received values for hats, keyed by alias
 
+    _pending_keys: set[str] = set()
+
+    _pending_movements: dict[str, list[str]] = {}
+    _fresh_from_deadzone: dict[str, bool] = {} # Whether a stick/trigger was in the deadzone in the previous check
+    _pending_hat_values: dict[str, set[int]] = {}
+
+    _unsequenced_inputs: set[tuple[str, ...]] = set() # An "input" means button/hat press, or a stick motion for which there exists a mapping
+
+    _currently_pressed_buttons: set[str] = set() # All buttons currently pressed
+    _currently_uncentered_hats: set[str] = set() # All hats    currently pressed
+    _notify: Callable[[list[str]], None] # Function called with stroke data when complete
 
     def __init__(self, params: dict[str, Any], notify: Callable[[list[str]], None]):
         super().__init__()
@@ -322,8 +316,8 @@ class ControllerState:
             button = button_entry.renamed
         if event.state:
             self._currently_pressed_buttons.add(button)
-            if button not in self._unsequenced_buttons_and_hats:
-                self._unsequenced_buttons_and_hats.add(button)
+            if (button,) not in self._unsequenced_inputs:
+                self._unsequenced_inputs.add(button)
         else:
             self._currently_pressed_buttons.discard(button)
             self.maybe_complete_stroke()
@@ -346,7 +340,7 @@ class ControllerState:
             pending_values.discard(SDL_HAT_LEFT)
             pending_values.discard(SDL_HAT_DOWN)
         for value in pending_values:
-            self._unsequenced_buttons_and_hats.add(f"{hat}{HAT_VALUES[value]}")
+            self._unsequenced_inputs.add(f"{hat}{HAT_VALUES[value]}")
         del self._pending_hat_values[hat]
 
     def any_active_inputs(self):
@@ -360,17 +354,18 @@ class ControllerState:
     def process_movements(self):
         def process(start_idx,end_idx):
             if start_idx < end_idx:
-                result = self._mappings.ordered_mappings.get(tuple( pending_movements[start_idx:end_idx] ))
+                result = self._mappings.mappings.get( (tuple( pending_movements[start_idx:end_idx] ,),) )
                 if result is None:
                     process(start_idx, end_idx-1)
                 else:
-                    self._pending_keys.update(result)
+                    self._unsequenced_inputs.add(tuple(pending_movements[start_idx:end_idx]))
                     process(end_idx, len(pending_movements))
 
             elif start_idx==end_idx:
                for key in pending_movements[start_idx:len(pending_movements)]:
-                   self._unsequenced_buttons_and_hats.add(key)
+                   self._unsequenced_inputs.add((key,))
 
+        print('pending:',self._pending_movements)
         for stick_or_trigger in [stick for stick in self._mappings.sticks.values()] + [trigger for trigger in self._mappings.triggers.values()]:
             pending_movements = self._pending_movements.get(stick_or_trigger.name, [])
             if(len(pending_movements)<30): # To avoid hitting the recursion limit.
@@ -380,14 +375,21 @@ class ControllerState:
     def maybe_complete_stroke(self):
         if self.any_active_inputs(): return
         self.process_movements()
-        keys = buttons_to_keys(
-            self._unsequenced_buttons_and_hats,
-            self._mappings.unordered_mappings,
-        ).union(self._pending_keys)
-        self._unsequenced_buttons_and_hats.clear()
+        print('inputs:',self._unsequenced_inputs)
         self._pending_movements.clear()
+
+        # _mappings.mappings is already sorted s.t. longest combos come first, at parse time.
+        for k in self._mappings.mappings:
+            v = self._mappings.mappings[k]
+            if self._unsequenced_inputs.issuperset(k):
+                self._pending_keys.update(v)
+                print('b4diff:',self._unsequenced_inputs)
+                self._unsequenced_inputs.difference_update(k)
+                print('diff\'d:',self._unsequenced_inputs.difference_update(k))
+        self._unsequenced_inputs.clear() # In case an input is mapped to nothing except as part of a combo. In which case inputs made in a previoius chord could leak into the next.
+
+        if self._pending_keys: self._notify(list(self._pending_keys))
         self._pending_keys.clear()
-        if keys: self._notify(list(keys))
 
     def check_axes(self):
         for stick in self._mappings.sticks.values():
@@ -462,9 +464,9 @@ class ControllerState:
 class ControllerMachine(StenotypeBase):
     KEYMAP_MACHINE_TYPE = "TX Bolt"
     KEYS_LAYOUT = """
-        #  #  #  #  #  #  #  #        #  #
-        S- T- P- H- * -F -P -L -K    -T -D
-        S- K- W- R- * -R -B    -C -G -S -Z
+        #  #  #  #  #  #  #  #  #  #
+        S- T- P- H- * -F -P -L -T -D
+        S- K- W- R- * -R -B -G -S -Z
                A- O- -E -U
     """
 
