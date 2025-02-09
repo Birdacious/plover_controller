@@ -1,89 +1,106 @@
-mapsl <- list( # Shoulder: S-    Trigger: R- & HR-
+maps_ltrig <- list(
+  R=c('l'),
+  L=c('l','h','l'),
+  L=c('l','h'    ) # misstroke, if trigger is raised too fast
+)
+
+maps_rtrig <- list(
+  R=c('l'),
+  L=c('l','h','l'),
+  L=c('l','h'    ),
+  RL=c('l','l'),
+  RL=c('l','l','h','l'),
+  RL=c('l','l','h'    ),
+  RL=c('l','h','l','l'),
+  RL=c('l','h','l','l','h','l'),
+  RL=c('l','h',  'l',  'h','l'),
+  RL=c('l','h',        'h','l')
+)
+
+# TODO: My stick mappings are outdated.
+#  They were created under the constraints of a more limited input space before I implemented combos.
+#  There is more room to make things more comfortable now.
+#  Maybe make -m/-n into a double-tap.
+maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
   `#`='ur', # no other motions from ur, too uncomfy  
     `#`=c('ur','u'), # misstroke
   G='dl',
-    G=c('dl','d'), # misstroke
     J=c('dl','l'), Y=c('dl','l','ul'),
       J=c('dl','l','dl'), # misstroke
-  M='r', W=c('r','r'), WH=c('r','r','dr'),
-      N=c('r','ur'),
-      D=c('r','dr'), # misstroke
+    G=c('dl','d'), # misstroke
+  M='r',
+    D=c('r','dr'), # misstroke
+    N=c('r','ur'),
+    W=c('r','r'),
+      WH=c('r','r','ur'), KW=c('r','r','ur','u'),
     SPW=c('r','l'), #ent-/int-
       SPW=c('r','ul'), SPW=c('r','dl'), # misstrokes
-    KW=c('r','r','ur','u'),
   P='ul',
     P=c('ul','u'), # misstroke
   K='u',
     X=c('u','ul'),
-    C=c('u','ur'), KM=c('u','ur','r'),
-  T='l', F=c('l','l'),
+    KH=c('u','ur'), KM=c('u','ur','r'),
+  T='l',
     T=c('l','dl'), # misstroke
+    TH=c('l','ul'),
+    F=c('l','l'),
+      V=c('l','l','ul'),
     TW=c('l','r'), # No need to double-tap for TW, since TM- doesn't exist.
       TW=c('l','ur'), TW=c('l','dr'), # misstrokes
-    TH=c('l','ul'),
-      V=c('l','l','ul'),
   D='dr',
     B=c('dr','r'),
   H='d',
     Z=c('d','dl')
 )
 
-mapsr <- list( # Shoulder: -F    Trigger: -R & -L
+maps_rstick <- list( # Shoulder: -F    Trigger: -R & -L
   `#`='ul', # no other motions from ul, too uncomfy
     `#`=c('ul','u'), # misstoke
   M='l', #`*NG`=c('u','u'),
     N=c('l','ul'),
-    MT=c('l','r'),
     D=c('l','dl'), # misstroke
+    MT=c('l','r'),
   G='dr',
     J=c('dr','r'),
     NG=c('dr','ul'),
       NG=c('dr','u'), NG=c('dr','l'), # misstrokes
   P='ur',
-    `*PL`=c('ur','u'), # -mp
-    `*PL`=c('ur','dl'), # Another option, slower, but more consistent with how other N/M combos work. 
-      `*PL`=c('ur','d'), `*PL`=c('ur','l'), # misstrokes
+    `*PL`=c('ur','dl'), 
+      `*PL`=c('ur','d'), `*PL`=c('ur','l'),  # misstrokes
+    `*PL`=c('ur','u'), # alternative, easier motion
   T='r',
-    NT=c('r','l'), # -nt
+    NT=c('r','l'), `*PBT`=c('r','r','l'), # -nt, ^n't / -nth
       NT=c('r','ul'), NT=c('r','dl'), # misstrokes
-    `*NT`=c('r','r','l'), # ^n't / -nth / -ngth 
-      `*NT`=c('r','r','ul'),`*NT`=c('r','r','dl'), # misstrokes
+      `*PBT`=c('r','r','ul'),`*PBT`=c('r','r','dl'), # misstrokes
     `*T`=c('r','ur'), V=c('r','r','ur'),
   D='dl',
     B=c('dl','l'),
     ND=c('dl','ur'),
       ND=c('dl','u'), ND=c('dl','r'), # misstrokes
   K='u',
-    C=c('u','ur'), KT=c('u','ur','r'), # -ch, -ct
-      NC=c('u','ur','dl'), # TODO: this motion sucks. Do some rearranging so that K is not so overloaded and you have room to make this easier.
-        NC=c('u','ur','d'), NC=c('u','ur','l'), # misstrokes
-    NK=c('u','d'),
-      NK=c('u','dl'), NK=c('u','dr'), # misstrokes
+    FP=c('u','ur'), KT=c('u','ur','r'), # -ch, -ct
+      FRPB=c('u','ur','dl'), # TODO: this motion sucks. Do some rearranging so that K is not so overloaded and you have room to make this easier. OR, maybe -n/-m double taps instead of cross-deadzone now. That would also fix this.
+        FRPB=c('u','ur','d'), FRPB=c('u','ur','l'), # misstrokes
+    `*NG`=c('u','d'), # -nk
+      `*NG`=c('u','dl'), `*NG`=c('u','dr'), # misstrokes
     GS=c('u','ul'), X=c('u','ul','l'), # -shun, -kshun
   S='d',
     Z=c('d','dl'),
-    RB=c('d','dr') # -sh
+    RB=c('d','dr')
 )
+# TODO: easy motion for -ngth words
 
 #STKPWHR AO*EU FRPBLKCGTSDZ
 
-# TODO: because -R is not on the stick, I can't deal with -rve (-RV -> -FRB). I'll need to either:
-#   1. Edit the dictionary s.t. *FR = -rve, and fix all conflicts that causes
-#   2. Deal with it and just memorize that -F + -RB (-sh) = -rve
-#   2. Edit custom steno system
-#   However, for now I can simply type v (*F) as a second stroke for -rve
-#   Doesn't cost me that much speed, and it will be easy to relearn if/when I fix this later.
-
 sub2  <- \(x,pattern,replacement)  sub(pattern,replacement,x) # More convenient for piping
 gsub2 <- \(x,pattern,replacement) gsub(pattern,replacement,x) # More convenient for piping
-translate_to_proper_steno_grammar <- \(strokes, stick) {
-  if(!(stick %in% c('left','right'))) stop('Invalid stick name.')
-  if(stick=='left') {
+translate_to_proper_steno_grammar <- \(strokes, side) {
+  if(!(side %in% c('lhs','rhs'))) stop('Invalid side')
+  if(side=='lhs') {
     strokes <- strokes |>
       sub2('D','TK'   ) |>
       sub2('B','PW'   ) |>
       sub2('L','HR'   ) |>
-      sub2('C','KH'   ) |>
       sub2('M','PH'   ) |>
       sub2('F','TP'   ) |>
       sub2('Q','KW'   ) |>
@@ -98,8 +115,9 @@ translate_to_proper_steno_grammar <- \(strokes, stick) {
     strokes <- steno_order[sort(match(strsplit(strokes,'')[[1]],steno_order))]
     strokes <- paste(c(strokes,'-'),collapse='')
   }
-  if(stick=='right') {
+  if(side=='rhs') {
     strokes <- strokes |>
+      sub2('K' ,'BG'  ) |>
       sub2('M' ,'PL'  ) |>
       sub2('N' ,'PB'  ) |>
       sub2('J' ,'PBLG') |>
@@ -119,32 +137,54 @@ translate_to_proper_steno_grammar <- \(strokes, stick) {
   strokes <- paste(strokes,collapse='')
 }
 
-names(mapsl) <- sapply(names(mapsl), translate_to_proper_steno_grammar,  'left')
-names(mapsr) <- sapply(names(mapsr), translate_to_proper_steno_grammar, 'right')
+names(maps_lstick) <- sapply(names(maps_lstick), translate_to_proper_steno_grammar, 'lhs')
+names(maps_rstick) <- sapply(names(maps_rstick), translate_to_proper_steno_grammar, 'rhs')
+names(maps_ltrig)  <- sapply(names(maps_ltrig ), translate_to_proper_steno_grammar, 'lhs')
+names(maps_rtrig)  <- sapply(names(maps_rtrig ), translate_to_proper_steno_grammar, 'rhs')
 
 # Generate the plover_controller file
-map2string <- \(map,nm,stick) {
-  if(!(stick %in% c('left','right'))) stop('Invalid stick name.')
-  paste0(stick,'(',paste(map,collapse=','),') -> ',nm)
+map2string <- \(map,nm,stick_or_trig) {
+  paste0(stick_or_trig,'(',paste(map,collapse=','),') -> ',nm)
 }
 
-c(mapply(mapsl,names(mapsl), FUN = \(map,nm) map2string(map,nm,'left')),
-  mapply(mapsr,names(mapsr), FUN = \(map,nm) map2string(map,nm,'right'))) |>
-writeLines('booger.txt')
+tmp <- c(mapply(maps_lstick, names(maps_lstick), FUN = \(map,nm) map2string(map,nm,'lstick')),
+         mapply(maps_rstick, names(maps_rstick), FUN = \(map,nm) map2string(map,nm,'rstick')),
+         mapply(maps_ltrig,  names(maps_ltrig ), FUN = \(map,nm) map2string(map,nm,'ltrig')),
+         mapply(maps_rtrig,  names(maps_rtrig ), FUN = \(map,nm) map2string(map,nm,'rtrig')))
 
+extract_motion <- \(x) sub(' ->.*', '', tmp[names(tmp)==x])
+all_possible_combos <- \(...) apply(expand.grid(...), 1, paste, collapse=' + ')
+make_combos <- \(..., output) combos2add <- lapply(list(...),extract_motion) |> all_possible_combos() |> paste('->',output)
 
-# FIXME this broke since I changed how numbers work in the new steno system
+# Manual additions:
+#   -rv = FRB,             but -v = *F
+#   -rch (& -nch) = -FRPB, but -ch = FP
+#   -lch = also -LG,       but -ch = FP
+#   -lj = -LG,             but J = PBLG
+#   -lk = *LG,             but -k=BG
+tmp <- c(tmp,
+  make_combos('-R','-FP',   output='-FRPB'),
+  make_combos('-R','-PB',   output='-FRB'),
+  make_combos('-L','-PBLG', output='-LG'),
+  make_combos('-L','-FP',   output='-LG'),
+  make_combos('-L','-BG',   output='*LG')
+)
+
+writeLines(tmp, 'booger.txt')
+
+# -------- -------- -----_-- --------
+
 library(jsonlite)
 # Need num dictionary.
 # To do that, make list where
-#   nms are strokes w/ plover-auto-transl'd #s,
-#   els are what you actually finna get typed
+#   names are strokes w/ plover-auto-transl'd #s,
+#   items are what you actually finna get typed
 # 1. Get w/e is ul, u, ur, l, etc. on RHS, add '#' to it, set transl to 1234 etc.
 #   a. Also {&0.1} {&0.2} etc.
 #   b. Also LHS S to names and then {super(1)} {super(2)} etc.
 # 2. Transl the nms from #S.. #T... -> 1... 2... as plover would
 ns   <- c(`-U`='0',ul='1',u='2',ur='3',l='4',`*`='5',r='6',dl='7',d='8',dr='9')
-m <- sapply(names(ns),'==',mapsr)
+m <- sapply(names(ns),'==',maps_rstick)
 names(ns)[col(m)[m]] <- rownames(m)[row(m)[m]]
 names(ns) <- sub('##','#',paste0('#',names(ns)))
 ns
@@ -177,4 +217,3 @@ names(ns2) <- sapply(names(ns2), simulate_plover_num_conversion)
 ns2
 
 write_json(as.list(ns2), 'numbers.json', auto_unbox=T,pretty=T)
-
