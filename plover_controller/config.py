@@ -100,6 +100,5 @@ class Mappings:
         # Sort so that longest combos come first.
         #sorted_keys = sorted(m.mappings.keys(), key=len, reverse=True)
         m.mappings = {k: m.mappings[k] for k in sorted(m.mappings.keys(), key=len, reverse=True)}
-        print(m.mappings)
 
         return m
