@@ -1,7 +1,12 @@
 maps_ltrig <- list(
   R=c('l'),
   L=c('l','h','l'),
-  L=c('l','h'    ) # misstroke, if trigger is raised too fast
+  L=c('l','h'    ), # ! misstroke, if trigger is raised too fast
+  STKPWHR=c('l','l'), # Activate modifiers
+  SHREUFRPL=c('l','h','l','h','l'), # Activate shrimple
+  SHREUFRPL=c(    'h','l','h','l'),
+  SHREUFRPL=c('l','h','l','h'    ),
+  SHREUFRPL=c(    'h','l','h'    )
 )
 
 maps_rtrig <- list(
@@ -22,12 +27,11 @@ maps_rtrig <- list(
 #  There is more room to make things more comfortable now.
 #  Maybe make -m/-n into a double-tap.
 maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
-  `#`='ur', # no other motions from ur, too uncomfy  
-    `#`=c('ur','u'), # misstroke
-  G='dl',
-    J=c('dl','l'), Y=c('dl','l','ul'),
-      J=c('dl','l','dl'), # misstroke
-    G=c('dl','d'), # misstroke
+  #`#`='ur', # no other motions from ur, too uncomfy
+  #  `#`=c('ur','u'), # misstroke
+  G='dr',
+    J=c('rl','r'), Y=c('rl','r','ur'),
+      J=c('rl','r','dr'), # misstroke
   M='r',
     D=c('r','dr'), # misstroke
     N=c('r','ur'),
@@ -38,8 +42,8 @@ maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
   P='ul',
     P=c('ul','u'), # misstroke
   K='u',
-    X=c('u','ul'),
-    KH=c('u','ur'), KM=c('u','ur','r'),
+    KH=c('u','ul'),
+    X=c('u','ur'), KM=c('u','ur','r'),
   T='l',
     T=c('l','dl'), # misstroke
     TH=c('l','ul'),
@@ -47,8 +51,9 @@ maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
       V=c('l','l','ul'),
     TW=c('l','r'), # No need to double-tap for TW, since TM- doesn't exist.
       TW=c('l','ur'), TW=c('l','dr'), # misstrokes
-  D='dr',
-    B=c('dr','r'),
+  D='dl',
+    B=c('dl','l'),
+    D=c('dl','d'), # misstroke
   H='d',
     Z=c('d','dl')
 )
@@ -56,27 +61,31 @@ maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
 maps_rstick <- list( # Shoulder: -F    Trigger: -R & -L
   `#`='ul', # no other motions from ul, too uncomfy
     `#`=c('ul','u'), # misstoke
-  M='l', #`*NG`=c('u','u'),
-    N=c('l','ul'),
+  M='l',
+    N=c('l','ul'), `*NG`=c('l','ul','u'), # -nk
     D=c('l','dl'), # misstroke
     MT=c('l','r'),
-  G='dr',
-    J=c('dr','r'),
-    NG=c('dr','ul'),
-      NG=c('dr','u'), NG=c('dr','l'), # misstrokes
+    `*PLZ`=c('l','l'), `*PBLGZ`=c('l','l','ul','u'), # for 'w' & 'q' fingerspelling
+  G='dl',
+    J=c('dl','l'), Y=c('dl','l','ul'),
+    NG=c('dl','ur'),
+      NG=c('dl','u'), NG=c('dl','r'), # misstrokes
   P='ur',
     `*PL`=c('ur','dl'), 
       `*PL`=c('ur','d'), `*PL`=c('ur','l'),  # misstrokes
     `*PL`=c('ur','u'), # alternative, easier motion
+    PD=c('ur','r','dr'), # tepid, vapid, etc.
   T='r',
     NT=c('r','l'), `*PBT`=c('r','r','l'), # -nt, ^n't / -nth
       NT=c('r','ul'), NT=c('r','dl'), # misstrokes
       `*PBT`=c('r','r','ul'),`*PBT`=c('r','r','dl'), # misstrokes
-    `*T`=c('r','ur'), V=c('r','r','ur'),
-  D='dl',
-    B=c('dl','l'),
-    ND=c('dl','ur'),
-      ND=c('dl','u'), ND=c('dl','r'), # misstrokes
+    `*T`=c('r','ur'),
+    F=c('r','r'),
+      V=c('r','r','ur'),
+  D='dr',
+    B=c('dr','r'),
+    ND=c('dr','ul'),
+      ND=c('dr','l'), ND=c('rl','u'), # misstrokes
   K='u',
     FP=c('u','ur'), KT=c('u','ur','r'), # -ch, -ct
       FRPB=c('u','ur','dl'), # TODO: this motion sucks. Do some rearranging so that K is not so overloaded and you have room to make this easier. OR, maybe -n/-m double taps instead of cross-deadzone now. That would also fix this.
@@ -117,14 +126,15 @@ translate_to_proper_steno_grammar <- \(strokes, side) {
   }
   if(side=='rhs') {
     strokes <- strokes |>
-      sub2('K' ,'BG'  ) |>
-      sub2('M' ,'PL'  ) |>
-      sub2('N' ,'PB'  ) |>
-      sub2('J' ,'PBLG') |>
-      sub2('SH','RB'  ) |>
-      sub2('TH','*T'  ) |>
-      sub2('V' ,'*F'  ) |>
-      sub2('X' ,'BGS' )
+      sub2('K' ,'BG'   ) |>
+      sub2('M' ,'PL'   ) |>
+      sub2('N' ,'PB'   ) |>
+      sub2('J' ,'PBLG' ) |>
+      sub2('SH','RB'   ) |>
+      sub2('TH','*T'   ) |>
+      sub2('V' ,'*F'   ) |>
+      sub2('X' ,'BGS'  ) |>
+      sub2('Y' ,'RPBLG') # Y = KWR on LHS, so Y = RMK (R)(PL)(BG) on RHS
     steno_order <- c('#','*','F','R','P','B','L','G','T','S','D','Z')
     strokes <- steno_order[sort(match(strsplit(strokes,'')[[1]],steno_order))]
     strokes <- paste(c('-',strokes),collapse='')
@@ -156,23 +166,34 @@ extract_motion <- \(x) sub(' ->.*', '', tmp[names(tmp)==x])
 all_possible_combos <- \(...) apply(expand.grid(...), 1, paste, collapse=' + ')
 make_combos <- \(..., output) combos2add <- lapply(list(...),extract_motion) |> all_possible_combos() |> paste('->',output)
 
-# Manual additions:
+# Combos to work around steno rules:
 #   -rv = FRB,             but -v = *F
 #   -rch (& -nch) = -FRPB, but -ch = FP
 #   -lch = also -LG,       but -ch = FP
 #   -lj = -LG,             but J = PBLG
-#   -lk = *LG,             but -k=BG
+#   -lk = *LG,             but -k = BG
 tmp <- c(tmp,
   make_combos('-R','-FP',   output='-FRPB'),
-  make_combos('-R','-PB',   output='-FRB'),
-  make_combos('-L','-PBLG', output='-LG'),
-  make_combos('-L','-FP',   output='-LG'),
-  make_combos('-L','-BG',   output='*LG')
+  make_combos('-R','-PB',   output='-FRB' ),
+  make_combos('-L','-PBLG', output='-LG'  ),
+  make_combos('-L','-FP',   output='-LG'  ),
+  make_combos('-L','-BG',   output='*-LG' ))
+# Combos for some RHS fingerspellings
+tmp <- c(tmp,
+  make_combos('-L','-P',     output='-PLZ'   ), # B/c I want R + P to be '3'
+  make_combos('-L','-PL',    output='-PLSZ'  ), # B/c I want R + M to be '4'
+  make_combos('-R','-RPBLG', output='-RPBLGZ')) # B/c I want R + Y to be 'i'
+
+
+# Manual additions:
+tmp <- c(tmp,
+  'lstickclick -> PHO-UPL' # Enter mouse mode ("moum")
 )
+
 
 writeLines(tmp, 'booger.txt')
 
-# -------- -------- -----_-- --------
+# ----------
 
 library(jsonlite)
 # Need num dictionary.
@@ -183,7 +204,7 @@ library(jsonlite)
 #   a. Also {&0.1} {&0.2} etc.
 #   b. Also LHS S to names and then {super(1)} {super(2)} etc.
 # 2. Transl the nms from #S.. #T... -> 1... 2... as plover would
-ns   <- c(`-U`='0',ul='1',u='2',ur='3',l='4',`*`='5',r='6',dl='7',d='8',dr='9')
+ns   <- c(`-U`='0',ul='1',u='2',ur='3',l='4',`-E`='5',r='6',dl='7',d='8',dr='9')
 m <- sapply(names(ns),'==',maps_rstick)
 names(ns)[col(m)[m]] <- rownames(m)[row(m)[m]]
 names(ns) <- sub('##','#',paste0('#',names(ns)))
