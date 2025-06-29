@@ -214,6 +214,7 @@ make_combos <- \(..., output) combos2add <- lapply(list(...),extract_motion) |> 
 #   -lch = also -LG,       but -ch = FP
 #   -lj = -LG,             but J = PBLG
 #   -lk = *LG,             but -k = BG
+# S/t for -mp?
 tmp <- c(tmp,
   make_combos('-R','-FP',   output='-FRPB'),
   make_combos('-R','-PB',   output='-FRB' ),
@@ -222,8 +223,8 @@ tmp <- c(tmp,
   make_combos('-L','-BG',   output='*-LG' ))
 # Combos for some RHS fingerspellings
 tmp <- c(tmp,
-  make_combos('-L','-P',     output='-PLZ'   ), # B/c I want R + P to be '3'
-  make_combos('-L','-PL',    output='-PLSZ'  ), # B/c I want R + M to be '4'
+  make_combos('-L','-P',     output='-PLZ'   ), # B/c I want L + P to be '3'
+  make_combos('-L','-PL',    output='-PLSZ'  ), # B/c I want L + M to be '4'
   make_combos('-R','-RPBLG', output='-RPBLGZ')) # B/c I want R + Y to be 'i'
 
 writeLines(c(defines,tmp), 'booger.txt')

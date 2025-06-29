@@ -9,7 +9,7 @@ Rules like this were invented to help make typical steno keyboards more compact/
 I don't want the overhead of remembering these rules, I simply want a button that sounds like -r, one that sounds like -v, and when I press them together they should be -rve.
 
 Note: longest combinations are resolved first.
-If you have two combinations of same length like 'a + b -> z' and 'a + c -> y', and press a+b+x, one will be chosen arbitrarily.
+If you have two combinations of same length like 'a + b -> z' and 'a + c -> y', and press a+b+c, one will be chosen arbitrarily.
 To avoid ambiguity, you could simply add a combination like 'a + b + c -> x'.
 
 Below is `plover_controller`'s original README:
