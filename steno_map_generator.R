@@ -33,7 +33,7 @@ maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
     J=c('rl','r'), Y=c('rl','r','ur'),
       J=c('rl','r','dr'), # misstroke
   M='r',
-    D=c('r','dr'), # misstroke
+    G=c('r','dr'), # misstroke
     N=c('r','ur'),
     W=c('r','r'),
       WH=c('r','r','ur'), KW=c('r','r','ur','u'),
@@ -63,7 +63,7 @@ maps_rstick <- list( # Shoulder: -F    Trigger: -R & -L
     `#`=c('ul','u'), # misstoke
   M='l',
     N=c('l','ul'), `*NG`=c('l','ul','u'), # -nk
-    D=c('l','dl'), # misstroke
+    G=c('l','dl'), # misstroke
     MT=c('l','r'),
     `*PLZ`=c('l','l'), `*PBLGZ`=c('l','l','ul','u'), # for 'w' & 'q' fingerspelling
   G='dl',
@@ -92,7 +92,7 @@ maps_rstick <- list( # Shoulder: -F    Trigger: -R & -L
         FRPB=c('u','ur','d'), FRPB=c('u','ur','l'), # misstrokes
     `*NG`=c('u','d'), # -nk
       `*NG`=c('u','dl'), `*NG`=c('u','dr'), # misstrokes
-    GS=c('u','ul'), X=c('u','ul','l'), # -shun, -kshun
+    X=c('u','ul'), GS=c('u','ul','l'), # -shun, -kshun
   S='d',
     Z=c('d','dl'),
     RB=c('d','dr')
