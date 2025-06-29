@@ -11,38 +11,28 @@ button 5 is home
 button 6 is plus
 button 7 is lstickclick
 button 8 is rstickclick
-button 9 is lshoulder
-button 10 is rshoulder
+button 9 is leftshoulder
+button 10 is rightshoulder
 button 11 is dpup
 button 12 is dpdown
 button 13 is dpleft
 button 14 is dpright
-
-a -> *-EUFRPBLGTSDZ // {PLOVER:TOGGLE}
-b -> -U // Mapped to a paddle
-x -> A- // Mapped to a paddle
-y -> -E // Mapped to a paddle
-//minus ->
-//home ->
-//plus ->
-lstickclick -> *
+a -> PHRO-LG // Toggle Plover
+b -> -E
+x -> O-
+y -> -U
+home -> A-
+lstickclick -> PHO-UPL // Activate mouse mode
 rstickclick -> *
-lshoulder -> S-
-rshoulder -> -F
-//dpup -> A-
-dpdown -> O- // Mapped to a paddle
-//dpleft -> O-
-//dpright -> -E
+leftshoulder -> S-
+rightshoulder -> -F
 
-lstick(ur) -> #-
-lstick(ur,u) -> #-
-lstick(dl) -> TKPW-
-lstick(dl,l) -> SKWR-
-lstick(dl,l,ul) -> KWR-
-lstick(dl,l,dl) -> SKWR-
-lstick(dl,d) -> TKPW-
+lstick(dr) -> TKPW-
+lstick(rl,r) -> SKWR-
+lstick(rl,r,ur) -> KWR-
+lstick(rl,r,dr) -> SKWR-
 lstick(r) -> PH-
-lstick(r,dr) -> TK-
+lstick(r,dr) -> TKPW-
 lstick(r,ur) -> TPH-
 lstick(r,r) -> W-
 lstick(r,r,ur) -> WH-
@@ -53,8 +43,8 @@ lstick(r,dl) -> SPW-
 lstick(ul) -> P-
 lstick(ul,u) -> P-
 lstick(u) -> K-
-lstick(u,ul) -> KP-
-lstick(u,ur) -> KH-
+lstick(u,ul) -> KH-
+lstick(u,ur) -> KP-
 lstick(u,ur,r) -> KPH-
 lstick(l) -> T-
 lstick(l,dl) -> T-
@@ -64,26 +54,32 @@ lstick(l,l,ul) -> SR-
 lstick(l,r) -> TW-
 lstick(l,ur) -> TW-
 lstick(l,dr) -> TW-
-lstick(dr) -> TK-
-lstick(dr,r) -> PW-
+lstick(dl) -> TK-
+lstick(dl,l) -> PW-
+lstick(dl,d) -> TK-
 lstick(d) -> H-
 lstick(d,dl) -> STKPW-
 rstick(ul) -> #-
 rstick(ul,u) -> #-
 rstick(l) -> -PL
 rstick(l,ul) -> -PB
-rstick(l,dl) -> -D
+rstick(l,ul,u) -> *-PBG
+rstick(l,dl) -> -G
 rstick(l,r) -> -PLT
-rstick(dr) -> -G
-rstick(dr,r) -> -PBLG
-rstick(dr,ul) -> -PBG
-rstick(dr,u) -> -PBG
-rstick(dr,l) -> -PBG
+rstick(l,l) -> *-PLZ
+rstick(l,l,ul,u) -> *-PBLGZ
+rstick(dl) -> -G
+rstick(dl,l) -> -PBLG
+rstick(dl,l,ul) -> -RPBLG
+rstick(dl,ur) -> -PBG
+rstick(dl,u) -> -PBG
+rstick(dl,r) -> -PBG
 rstick(ur) -> -P
 rstick(ur,dl) -> *-PL
 rstick(ur,d) -> *-PL
 rstick(ur,l) -> *-PL
 rstick(ur,u) -> *-PL
+rstick(ur,r,dr) -> -PD
 rstick(r) -> -T
 rstick(r,l) -> -PBT
 rstick(r,r,l) -> *-PBT
@@ -92,12 +88,13 @@ rstick(r,dl) -> -PBT
 rstick(r,r,ul) -> *-PBT
 rstick(r,r,dl) -> *-PBT
 rstick(r,ur) -> *-T
+rstick(r,r) -> -F
 rstick(r,r,ur) -> *-F
-rstick(dl) -> -D
-rstick(dl,l) -> -B
-rstick(dl,ur) -> -PBD
-rstick(dl,u) -> -PBD
-rstick(dl,r) -> -PBD
+rstick(dr) -> -D
+rstick(dr,r) -> -B
+rstick(dr,ul) -> -PBD
+rstick(dr,l) -> -PBD
+rstick(rl,u) -> -PBD
 rstick(u) -> -BG
 rstick(u,ur) -> -FP
 rstick(u,ur,r) -> -BGT
@@ -107,14 +104,19 @@ rstick(u,ur,l) -> -FRPB
 rstick(u,d) -> *-PBG
 rstick(u,dl) -> *-PBG
 rstick(u,dr) -> *-PBG
-rstick(u,ul) -> -GS
-rstick(u,ul,l) -> -BGS
+rstick(u,ul) -> -BGS
+rstick(u,ul,l) -> -GS
 rstick(d) -> -S
 rstick(d,dl) -> -Z
 rstick(d,dr) -> -RB
 ltrig(l) -> R-
 ltrig(l,h,l) -> HR-
 ltrig(l,h) -> HR-
+ltrig(l,l) -> STKPWHR-
+ltrig(l,h,l,h,l) -> STPHR-
+ltrig(h,l,h,l) -> STPHR-
+ltrig(l,h,l,h) -> STPHR-
+ltrig(h,l,h) -> STPHR-
 rtrig(l) -> -R
 rtrig(l,h,l) -> -L
 rtrig(l,h) -> -L
@@ -127,9 +129,14 @@ rtrig(l,h,l,h,l) -> -RL
 rtrig(l,h,h,l) -> -RL
 rtrig(l) + rstick(u,ur) -> -FRPB
 rtrig(l) + rstick(l,ul) -> -FRB
-rtrig(l,h,l) + rstick(dr,r) -> -LG
-rtrig(l,h) + rstick(dr,r) -> -LG
+rtrig(l,h,l) + rstick(dl,l) -> -LG
+rtrig(l,h) + rstick(dl,l) -> -LG
 rtrig(l,h,l) + rstick(u,ur) -> -LG
 rtrig(l,h) + rstick(u,ur) -> -LG
-rtrig(l,h,l) + rstick(u) -> *LG
-rtrig(l,h) + rstick(u) -> *LG
+rtrig(l,h,l) + rstick(u) -> *-LG
+rtrig(l,h) + rstick(u) -> *-LG
+rtrig(l,h,l) + rstick(ur) -> -PLZ
+rtrig(l,h) + rstick(ur) -> -PLZ
+rtrig(l,h,l) + rstick(l) -> -PLSZ
+rtrig(l,h) + rstick(l) -> -PLSZ
+rtrig(l) + rstick(dl,l,ul) -> -RPBLGZ

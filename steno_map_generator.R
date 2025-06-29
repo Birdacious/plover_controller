@@ -1,3 +1,45 @@
+# Defines for my KK3 Max controller, plus some hard-coded chords
+defines <- c(
+  'lstick stick has segments (dr,d,dl,l,ul,u,ur,r) on axes 0 and 1 offset by 22.5 degrees',
+  'rstick stick has segments (dr,d,dl,l,ul,u,ur,r) on axes 2 and 3 offset by 22.5 degrees',
+
+  'trigger on axis 4 is ltrig',
+  'trigger on axis 5 is rtrig',
+
+  'button 0 is a',
+  'button 1 is b',
+  'button 2 is x',
+  'button 3 is y',
+  'button 4 is minus',
+  'button 5 is home',
+  'button 6 is plus',
+  'button 7 is lstickclick',
+  'button 8 is rstickclick',
+  'button 9 is leftshoulder',
+  'button 10 is rightshoulder',
+  'button 11 is dpup',
+  'button 12 is dpdown',
+  'button 13 is dpleft',
+  'button 14 is dpright',
+
+  'a -> PHRO-LG // Toggle Plover',
+  'b -> -E',
+  'x -> O-',
+  'y -> -U',
+  #'minus ->',
+  'home -> A-',
+  #'plus ->',
+  'lstickclick -> PHO-UPL // Activate mouse mode', # "moum"
+  'rstickclick -> *',
+  'leftshoulder -> S-',
+  'rightshoulder -> -F',
+  #'dpup ->',
+  #'dpdown ->',
+  #'dpleft ->',
+  #'dpright ->',
+  ''
+)
+
 maps_ltrig <- list(
   R=c('l'),
   L=c('l','h','l'),
@@ -184,14 +226,7 @@ tmp <- c(tmp,
   make_combos('-L','-PL',    output='-PLSZ'  ), # B/c I want R + M to be '4'
   make_combos('-R','-RPBLG', output='-RPBLGZ')) # B/c I want R + Y to be 'i'
 
-
-# Manual additions:
-tmp <- c(tmp,
-  'lstickclick -> PHO-UPL' # Enter mouse mode ("moum")
-)
-
-
-writeLines(tmp, 'booger.txt')
+writeLines(c(defines,tmp), 'booger.txt')
 
 # ----------
 
