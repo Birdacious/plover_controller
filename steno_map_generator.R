@@ -107,7 +107,7 @@ maps_rstick <- list( # Shoulder: -F    Trigger: -R & -L
     N=c('l','ul'), `*NG`=c('l','ul','u'), # -nk
     G=c('l','dl'), # misstroke
     MT=c('l','r'),
-    `*PLZ`=c('l','l'), `*PBLGZ`=c('l','l','ul','u'), # for 'w' & 'q' fingerspelling
+    PSDZ=c('l','l'), PBGSDZ=c('l','l','ul','u'), # for 'w' & 'q' fingerspelling
   G='dl',
     J=c('dl','l'), Y=c('dl','l','ul'),
     NG=c('dl','ur'),
@@ -193,6 +193,19 @@ names(maps_lstick) <- sapply(names(maps_lstick), translate_to_proper_steno_gramm
 names(maps_rstick) <- sapply(names(maps_rstick), translate_to_proper_steno_grammar, 'rhs')
 names(maps_ltrig)  <- sapply(names(maps_ltrig ), translate_to_proper_steno_grammar, 'lhs')
 names(maps_rtrig)  <- sapply(names(maps_rtrig ), translate_to_proper_steno_grammar, 'rhs')
+
+# Manual addition of one-handed motions mapping to other-hand or two-hand chords.
+maps_rstick <- c(maps_rstick, list(
+  # Symbol base for use with Shrimple
+  `HA*ERB`   =c('ul','ul'), # #
+  OEU        =c('u', 'u' ), # /
+  `STPH-FPT` =c('ur','ur'), # : normally STPH-FP_L_T
+  `KR*GS`    =c('l', 'l' ), # "
+  `TKPWR*PB` =c('r', 'r' ), # >
+  `PHR*US`   =c('dl','dl'), # +
+  `KW*`      =c('d', 'd' ), # = normally KW*_L_
+  `STPH*FPT` =c('dr','dr')  # ; normally STPH*FP_L_T
+))
 
 # Generate the plover_controller file
 map2string <- \(map,nm,stick_or_trig) {
