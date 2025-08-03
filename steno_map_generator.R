@@ -26,7 +26,7 @@ defines <- c(
   'b -> -E',
   'x -> O-',
   'y -> -U',
-  #'minus ->',
+  'minus -> A-',
   'home -> A-',
   #'plus ->',
   'lstickclick -> PHO-UPL // Activate mouse mode', # "moum"
@@ -72,8 +72,8 @@ maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
   #`#`='ur', # no other motions from ur, too uncomfy
   #  `#`=c('ur','u'), # misstroke
   G='dr',
-    J=c('rl','r'), Y=c('rl','r','ur'),
-      J=c('rl','r','dr'), # misstroke
+    J=c('dr','r'), Y=c('dr','r','ur'),
+      J=c('dr','r','dr'), # misstroke
   M='r',
     G=c('r','dr'), # misstroke
     N=c('r','ur'),
@@ -127,7 +127,7 @@ maps_rstick <- list( # Shoulder: -F    Trigger: -R & -L
   D='dr',
     B=c('dr','r'),
     ND=c('dr','ul'),
-      ND=c('dr','l'), ND=c('rl','u'), # misstrokes
+      ND=c('dr','l'), ND=c('dr','u'), # misstrokes
   K='u',
     FP=c('u','ur'), KT=c('u','ur','r'), # -ch, -ct
       FRPB=c('u','ur','dl'), # TODO: this motion sucks. Do some rearranging so that K is not so overloaded and you have room to make this easier. OR, maybe -n/-m double taps instead of cross-deadzone now. That would also fix this.
@@ -197,14 +197,14 @@ names(maps_rtrig)  <- sapply(names(maps_rtrig ), translate_to_proper_steno_gramm
 # Manual addition of one-handed motions mapping to other-hand or two-hand chords.
 maps_rstick <- c(maps_rstick, list(
   # Symbol base for use with Shrimple
-  `HA*ERB`   =c('ul','ul'), # #
+  `HA*-ERB`   =c('ul','ul'), # #
   OEU        =c('u', 'u' ), # /
   `STPH-FPT` =c('ur','ur'), # : normally STPH-FP_L_T
-  `KR*GS`    =c('l', 'l' ), # "
-  `TKPWR*PB` =c('r', 'r' ), # >
-  `PHR*US`   =c('dl','dl'), # +
+  `KR*-GS`    =c('l', 'l' ), # "
+  `TKPWR*-PB` =c('r', 'r' ), # >
+  `PHR*-US`   =c('dl','dl'), # +
   `KW*`      =c('d', 'd' ), # = normally KW*_L_
-  `STPH*FPT` =c('dr','dr')  # ; normally STPH*FP_L_T
+  `STPH*-FPT` =c('dr','dr')  # ; normally STPH*FP_L_T
 ))
 
 # Generate the plover_controller file
