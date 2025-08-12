@@ -55,7 +55,7 @@ maps_rtrig <- list(
   R=c('l'),
   L=c('l','h','l'),
   L=c('l','h'    ),
-  RL=c('l','l'),
+  L=c('l','l'    ), # Alternate L
   RL=c('l','l','h','l'),
   RL=c('l','l','h'    ),
   RL=c('l','h','l','l'),
@@ -69,8 +69,8 @@ maps_rtrig <- list(
 #  There is more room to make things more comfortable now.
 #  Maybe make -m/-n into a double-tap.
 maps_lstick <- list( # Shoulder: S-    Trigger: R- & HR-
-  #`#`='ur', # no other motions from ur, too uncomfy
-  #  `#`=c('ur','u'), # misstroke
+  `#`='ur', # no other motions from ur, too uncomfy
+    `#`=c('ur','u'), # misstroke
   G='dr',
     J=c('dr','r'), Y=c('dr','r','ur'),
       J=c('dr','r','dr'), # misstroke
@@ -195,16 +195,16 @@ names(maps_ltrig)  <- sapply(names(maps_ltrig ), translate_to_proper_steno_gramm
 names(maps_rtrig)  <- sapply(names(maps_rtrig ), translate_to_proper_steno_grammar, 'rhs')
 
 # Manual addition of one-handed motions mapping to other-hand or two-hand chords.
-maps_rstick <- c(maps_rstick, list(
+maps_lstick <- c(maps_lstick, list(
   # Symbol base for use with Shrimple
-  `HA*-ERB`   =c('ul','ul'), # #
+  `HA*-ERB`   =c('ur','ur'), # #
   `O-EU`      =c('u', 'u' ), # /
-  `STPH-FPT`  =c('ur','ur'), # : normally STPH-FP_L_T
-  `KR*-GS`    =c('l', 'l' ), # "
-  `TKPWR*-PB` =c('r', 'r' ), # >
-  `PHR*-US`   =c('dl','dl'), # +
+  `STPH-FPT`  =c('ul','ul'), # : normally STPH-FP_L_T
+  #`KR*-GS`    =c('r', 'r' ), # "
+  `TKPWR*-PB` =c('l', 'l' ), # >
+  `PR*-US`    =c('dr','dr'), # +
   `KW*`       =c('d', 'd' ), # = normally KW*_L_
-  `STPH*-FPT` =c('dr','dr')  # ; normally STPH*FP_L_T
+  `STPH*-FPT` =c('dl','dl')  # ; normally STPH*FP_L_T
 ))
 
 # Generate the plover_controller file
