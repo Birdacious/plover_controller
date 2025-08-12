@@ -22,12 +22,12 @@ defines <- c(
   'button 13 is dpleft',
   'button 14 is dpright',
 
-  'a -> PHRO-LG // Toggle Plover',
+  'a -> A-',
   'b -> -E',
   'x -> O-',
   'y -> -U',
-  'minus -> A-',
-  'home -> A-',
+  #'minus ->',
+  'home -> PHRO-LG // Toggle Plover',
   #'plus ->',
   'lstickclick -> PHO-UPL // Activate mouse mode', # "moum"
   'rstickclick -> *',
@@ -198,12 +198,12 @@ names(maps_rtrig)  <- sapply(names(maps_rtrig ), translate_to_proper_steno_gramm
 maps_rstick <- c(maps_rstick, list(
   # Symbol base for use with Shrimple
   `HA*-ERB`   =c('ul','ul'), # #
-  OEU        =c('u', 'u' ), # /
-  `STPH-FPT` =c('ur','ur'), # : normally STPH-FP_L_T
+  `O-EU`      =c('u', 'u' ), # /
+  `STPH-FPT`  =c('ur','ur'), # : normally STPH-FP_L_T
   `KR*-GS`    =c('l', 'l' ), # "
   `TKPWR*-PB` =c('r', 'r' ), # >
   `PHR*-US`   =c('dl','dl'), # +
-  `KW*`      =c('d', 'd' ), # = normally KW*_L_
+  `KW*`       =c('d', 'd' ), # = normally KW*_L_
   `STPH*-FPT` =c('dr','dr')  # ; normally STPH*FP_L_T
 ))
 
